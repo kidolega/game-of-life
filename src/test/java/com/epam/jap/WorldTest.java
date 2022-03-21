@@ -5,7 +5,8 @@ import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class WorldTest {
 
@@ -17,46 +18,50 @@ public class WorldTest {
     private static final String ALIVE_1x2_3 = "XX"; // -> Dead_1x2
     private static final String ALIVE_2x1_1 =
             """
-            X
-            X
-            """; // -> Dead_2x1
+                    X
+                    X
+                    """; // -> Dead_2x1
     private static final String ALIVE_2x2_1 =
             """
-            _X
-            X_
-            """; // -> Dead_2x2
+                    _X
+                    X_
+                    """; // -> Dead_2x2
     private static final String ALIVE_2x2_2 =
             """
-            XX
-            X_
-            """; // -> Alive_2x2
+                    XX
+                    X_
+                    """; // -> Alive_2x2
     private static final String ALIVE_2x2_3 =
             """
-            X_
-            __
-            """; // -> DEAD_2x2
+                    X_
+                    __
+                    """; // -> DEAD_2x2
     private static final String ALIVE_2x2_4 =
             """
-            XX
-            XX
-            """; // -> ALIVE_2x2
+                    XX
+                    XX
+                    """; // -> ALIVE_2x2
 
     @DataProvider
     Object[][] shouldNotChange() {
-        return new Object[][] {
+        return new Object[][]{
                 {DEAD_1x1},
                 {DEAD_1x2},
-                {ALIVE_2x2_4}
+                {ALIVE_2x2_4},
+                {ALIVE_2x2_2}
         };
     }
 
     @DataProvider
     Object[][] shouldChange() {
-        return new Object[][] {
-            {ALIVE_1x1},
-            {ALIVE_1x2_1},
-            {ALIVE_1x2_2},
-            {ALIVE_1x2_3}
+        return new Object[][]{
+                {ALIVE_1x1},
+                {ALIVE_1x2_1},
+                {ALIVE_1x2_2},
+                {ALIVE_1x2_3},
+                {ALIVE_2x1_1},
+                {ALIVE_2x2_3},
+                {ALIVE_2x2_1}
         };
     }
 
@@ -70,6 +75,10 @@ public class WorldTest {
     private Boolean[] toRow(String r) {
         return r.chars().mapToObj(c -> c == 'X')
                 .toArray(Boolean[]::new);
+    }
+
+    private Boolean[][] toState(String state) {
+        return toArray(state);
     }
 
     @Test(dataProvider = "shouldChange")
@@ -98,7 +107,4 @@ public class WorldTest {
         assertEquals(world, evolved);
     }
 
-    private Boolean[][] toState(String state) {
-        return new Boolean[0][0];
-    }
 }
