@@ -1,30 +1,42 @@
 package com.epam.jap;
 
-import java.util.Arrays;
-
 public class World {
 
-    private int width;
+    private static final boolean IS_ALIVE = true;
+    private static final boolean IS_DEAD = false;
+
     private int height;
+    private int width;
     private Boolean[][] cells;
 
-    public World(int width, int height, Boolean[][] cells) {
-        this.width = width;
+    public World(int height, int width, Boolean[][] cells) {
         this.height = height;
+        this.width = width;
         this.cells = cells;
     }
 
     public World evolve() {
-        if (width == 1 && height == 1 && cells[0][0]) {
-            Boolean[][] cellsEvolved = new Boolean[][]{{false}};
-            cellsEvolved[0][0] = false;
-            return new World(1, 1, cellsEvolved);
+        int aliveCellsCounter = 0;
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                if (cells[row][col]) {
+                    aliveCellsCounter++;
+                }
+            }
         }
 
-        if (width == 2 && height == 1 && !(!cells[0][0] && !cells[0][1])) {
-            Boolean[][] cellsEvolved = new Boolean[][]{{false},{false}};
-            cellsEvolved[0][0] = false;
-            return new World(2, 1, cellsEvolved);
+        if (aliveCellsCounter == 0) {
+            return this;
+        }
+
+        if (aliveCellsCounter < 3) {
+            Boolean[][] evolvedCells = new Boolean[height][width];
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    evolvedCells[row][col] = IS_DEAD;
+                }
+            }
+            return new World(height, width, evolvedCells);
         }
         return this;
     }
