@@ -1,5 +1,6 @@
 package com.epam.jap;
 
+import org.junit.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -105,6 +106,19 @@ public class WorldTest {
         World evolved = world.evolve();
         // then
         assertEquals(world, evolved);
+    }
+
+    @Test
+    public void worldBeforeShouldNotEqualEvolvedWorld() {
+        // given
+        Boolean[][] cellsBefore = new Boolean[1][1];
+        cellsBefore[0][0] = true;
+        World worldBefore = new World(1, 1, cellsBefore);
+        // when
+        World worldEvolved = worldBefore.evolve();
+        // then
+        Assert.assertNotEquals(worldBefore, worldEvolved);
+
     }
 
 }
