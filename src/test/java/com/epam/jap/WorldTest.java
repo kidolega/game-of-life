@@ -143,6 +143,4 @@ public class WorldTest {
         // then
         Assert.assertNotEquals(worldBefore, worldEvolved);
     }
-
-
 }

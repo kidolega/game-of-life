@@ -1,5 +1,7 @@
 package com.epam.jap;
 
+import java.util.ArrayList;
+
 public class World {
 
     private static final boolean IS_ALIVE = true;
@@ -8,6 +10,7 @@ public class World {
     private int height;
     private int width;
     private Boolean[][] cells;
+    ArrayList<Cell> aliveCells;
 
     public World(int height, int width, Boolean[][] cells) {
         this.height = height;
@@ -21,6 +24,8 @@ public class World {
             for (int col = 0; col < width; col++) {
                 if (cells[row][col]) {
                     aliveCellsCounter++;
+                    cells[row][col] = false;
+//                    aliveCells.add(new Cell(row, col, true));
                 }
             }
         }
@@ -38,6 +43,7 @@ public class World {
             }
             return new World(height, width, evolvedCells);
         }
+
         return this;
     }
 }
