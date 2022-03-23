@@ -7,8 +7,14 @@ public class Game {
 
     public static void main(String[] args) {
 
-        World newWorld = world.createNewWorld(3, 3);
+        World newWorld = world.createNewWorld(10, 10);
 
+        printer.printWorld(newWorld);
+        System.out.println();
+        newWorld.evolve();
+        printer.printWorld(newWorld);
+        System.out.println();
+        newWorld.evolve();
         printer.printWorld(newWorld);
         System.out.println();
         newWorld.evolve();

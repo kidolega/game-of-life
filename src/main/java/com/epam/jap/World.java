@@ -32,7 +32,11 @@ public class World {
         Random random = new Random();
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                cells[row][col] = random.nextBoolean();
+                if ((row == 0 || row == height - 1) || (col == 0 || col == width - 1)) {
+                    cells[row][col] = false;
+                } else {
+                    cells[row][col] = random.nextBoolean();
+                }
             }
         }
         return new World(height, width, cells);
