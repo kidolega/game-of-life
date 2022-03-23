@@ -1,12 +1,8 @@
 package com.epam.jap;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class World {
-
-    private static final boolean IS_ALIVE = true;
-    private static final boolean IS_DEAD = false;
 
     public int height;
     public int width;
@@ -42,21 +38,11 @@ public class World {
         return new World(height, width, cells);
     }
 
-    public World evolve() {
-        return null;
-    }
-
-
-    private void die(World world) {
-        for (int i = 0; i < world.height; i++) {
-            for (int j = 0; j < world.width; j++) {
-                if (world.cells[i][j]) {
-                    System.out.print(1);
-                } else {
-                    System.out.print(0);
-                }
+    public void evolve() {
+        for (int i = 1; i < width - 1; i++) {
+            for (int j = 1; j < height - 1; j++) {
+                evolveCell(i, j, cells);
             }
-            System.out.println();
         }
     }
 
@@ -75,8 +61,8 @@ public class World {
         if (cells[row][col]) {
             counter--;
         }
-        for (int i = -1; i < 1; i++) {
-            for (int j = -1; j < 1; j++) {
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
                 if (cells[row + i][col + j]) {
                     counter++;
                 }
