@@ -58,7 +58,7 @@ public class CellTest {
     @Test(dataProvider = "hasNotEnoughFriends")
     public void shouldDieIfHasNotEnoughFriends(Boolean[][] cells) {
         // given
-        World world = new World(3, 3, cells);
+        World world = new World(3, 3);
         // when
         world.evolve();
         // then

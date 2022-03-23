@@ -112,7 +112,7 @@ public class WorldTest {
         Boolean[][] cells = toState(state);
         int height = cells.length;
         int width = cells[0].length;
-        World world = new World(height, width, cells);
+        World world = new World(height, width);
         // when
         World evolved = world.evolve();
         // then
@@ -125,7 +125,7 @@ public class WorldTest {
         Boolean[][] cells = toState(state);
         int height = cells.length;
         int width = cells[0].length;
-        World world = new World(height, width, cells);
+        World world = new World(height, width);
         // when
         World evolved = world.evolve();
         // then
@@ -133,14 +133,110 @@ public class WorldTest {
     }
 
     @Test
-    public void worldBeforeShouldNotEqualEvolvedWorld() {
+    public void counterShouldReturn0IfAliveCellHas0Friends() {
         // given
-        Boolean[][] cellsBefore = new Boolean[1][1];
-        cellsBefore[0][0] = true;
-        World worldBefore = new World(1, 1, cellsBefore);
+        Boolean[][] cells = new Boolean[][] {
+                {false, false, false},
+                {false, true, false},
+                {false, false, false},
+        };
+        World world = new World(3, 3, cells);
         // when
-        World worldEvolved = worldBefore.evolve();
+        int counter = world.countFriends(1, 1, cells);
         // then
-        Assert.assertNotEquals(worldBefore, worldEvolved);
+        Assert.assertEquals(0, counter);
+    }
+
+    @Test
+    public void counterShouldReturn0IfDeadCellHas0Friends() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {false, false, false},
+                {false, false, false},
+                {false, false, false},
+        };
+        World world = new World(3, 3, cells);
+        // when
+        int counter = world.countFriends(1, 1, cells);
+        // then
+        Assert.assertEquals(0, counter);
+    }
+
+    @Test
+    public void counterShouldReturn1IfAliveCellHas1Friend() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {true, false, false},
+                {false, true, false},
+                {false, false, false},
+        };
+        World world = new World(3, 3, cells);
+        // when
+        int counter = world.countFriends(1, 1, cells);
+        // then
+        Assert.assertEquals(1, counter);
+    }
+
+    @Test
+    public void counterShouldReturn1IfDeadCellHas1Friend() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {true, false, false},
+                {false, false, false},
+                {false, false, false},
+        };
+        World world = new World(3, 3, cells);
+        // when
+        int counter = world.countFriends(1, 1, cells);
+        // then
+        Assert.assertEquals(1, counter);
+    }
+
+    @Test
+    public void shouldKillCellInMiddleLonely() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {true, false, false},
+                {false, true, true},
+                {false, false, false},
+        };
+        World world = new World(cells);
+        // when
+        world.evolveCell(1, 1, cells);
+        boolean cell = cells[1][1];
+        // then
+        Assert.assertFalse(cell);
+    }
+
+    @Test
+    public void shouldKillCellInMiddleOverPopulated() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {true, false, false},
+                {false, true, false},
+                {false, false, false},
+        };
+        World world = new World(cells);
+        // when
+        world.evolveCell(1, 1, cells);
+        boolean cell = cells[1][1];
+        // then
+        Assert.assertFalse(cell);
+    }
+
+    @Test
+    public void shouldResurrectCellInMiddle() {
+        // given
+        Boolean[][] cells = new Boolean[][] {
+                {true, true, true},
+                {false, true, false},
+                {false, false, false},
+        };
+        World world = new World(cells);
+        // when
+        world.evolveCell(1, 1, cells);
+        boolean cell = cells[1][1];
+        // then
+        Assert.assertTrue(cell);
     }
 }
