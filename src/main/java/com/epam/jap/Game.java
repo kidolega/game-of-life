@@ -7,18 +7,13 @@ public class Game {
 
     public static void main(String[] args) {
 
-        World newWorld = world.createNewWorld(10, 10);
-
-        printer.printWorld(newWorld);
+        World originalWorld = world.createNewWorld(5, 5);
+        World evolvedWorld = null;
+        while (originalWorld != evolvedWorld) {
+        printer.printWorld(originalWorld);
         System.out.println();
-        newWorld.evolve();
-        printer.printWorld(newWorld);
-        System.out.println();
-        newWorld.evolve();
-        printer.printWorld(newWorld);
-        System.out.println();
-        newWorld.evolve();
-        printer.printWorld(newWorld);
-
+        originalWorld.evolve();
+        evolvedWorld = originalWorld;
+        }
     }
 }

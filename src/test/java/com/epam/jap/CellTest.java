@@ -55,15 +55,15 @@ public class CellTest {
         Assert.assertFalse(cell.isAlive);
     }
 
-    @Test(dataProvider = "hasNotEnoughFriends")
-    public void shouldDieIfHasNotEnoughFriends(Boolean[][] cells) {
-        // given
-        World world = new World(3, 3);
-        // when
-        world.evolve();
-        // then
-        Assert.assertFalse(cells[1][1]);
-    }
+//    @Test(dataProvider = "hasNotEnoughFriends")
+//    public void shouldDieIfHasNotEnoughFriends(Boolean[][] cells) {
+//        // given
+//        World world = new World(3, 3);
+//        // when
+//        world.evolve();
+//        // then
+//        Assert.assertFalse(cells[1][1]);
+//    }
 
 //    @Test(dataProvider = "hasEnoughFriends")
 //    public void shouldNotDieIfHasEnoughFriends(Boolean[][] cells) {
