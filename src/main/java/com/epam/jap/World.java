@@ -20,7 +20,7 @@ public class World {
         this.cells = cells;
     }
 
-    void createNewWorld(int height, int width) {
+    void initializeWorld(int height, int width) {
         Boolean[][] cells = new Boolean[height][width];
         Random random = new Random();
         for (int row = 0; row < height; row++) {
