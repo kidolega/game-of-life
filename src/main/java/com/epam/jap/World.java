@@ -11,23 +11,13 @@ public class World {
     public World() {
     }
 
-    public World(int height, int width) {
-        this.height = height;
-        this.width = width;
-        this.cells = new Boolean[height][width];
-    }
-
     public World(int height, int width, Boolean[][] cells) {
         this.height = height;
         this.width = width;
         this.cells = cells;
     }
 
-    public World(Boolean[][] cells) {
-        this.cells = cells;
-    }
-
-    public World createNewWorld(int height, int width) {
+    public void createNewWorld(int height, int width) {
         Boolean[][] cells = new Boolean[height][width];
         Random random = new Random();
         for (int row = 0; row < height; row++) {
@@ -39,7 +29,7 @@ public class World {
                 }
             }
         }
-        return new World(height, width, cells);
+        Game.world = new World(height, width, cells);
     }
 
     public void evolve() {

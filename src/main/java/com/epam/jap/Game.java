@@ -1,19 +1,27 @@
 package com.epam.jap;
 
+import static java.lang.System.out;
+
 public class Game {
 
-    private static Printer printer = new Printer();
+    public static Printer printer = new Printer(System.out);
     static World world = new World();
 
     public static void main(String[] args) {
 
-        World originalWorld = world.createNewWorld(5, 5);
+        int counter = 0;
+        world.createNewWorld(10, 10);
         World evolvedWorld = null;
-        while (originalWorld != evolvedWorld) {
-        printer.printWorld(originalWorld);
-        System.out.println();
-        originalWorld.evolve();
-        evolvedWorld = originalWorld;
+        while (counter < 10) {
+            counter++;
+        printer.printWorld();
+        out.println();
+        world.evolve();
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }
