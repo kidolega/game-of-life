@@ -4,13 +4,10 @@ import org.junit.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-
-import static com.epam.jap.Game.world;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
 public class WorldTest {
+
+    private Game game;
+    World world = new World();
 
     private static final Boolean[][] ALIVE_0_F= new Boolean[][]{
             {false, false, false},
@@ -113,9 +110,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn0IfAliveCellHas0Friends() {
         // given
-        Boolean[][] cells = ALIVE_0_F;
+        world.cells = ALIVE_0_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(0, counter);
     }
@@ -123,9 +120,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn1IfAliveCellHas1Friend() {
         // given
-        Boolean[][] cells = ALIVE_1_F;
+        world.cells = ALIVE_1_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(1, counter);
     }
@@ -133,9 +130,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn5IfAliveCellHas5Friends() {
         // given
-        Boolean[][] cells = ALIVE_5_F;
+        world.cells = ALIVE_5_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(5, counter);
     }
@@ -143,9 +140,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn0IfDeadCellHas0Friends() {
         // given
-        Boolean[][] cells = DEAD_0_F;
+        world.cells = DEAD_0_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(0, counter);
     }
@@ -153,9 +150,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn1IfDeadCellHas1Friend() {
         // given
-        Boolean[][] cells = DEAD_1_F;
+        world.cells = DEAD_1_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(1, counter);
     }
@@ -163,9 +160,9 @@ public class WorldTest {
     @Test
     public void counterShouldReturn5IfDeadCellHas5Friends() {
         // given
-        Boolean[][] cells = DEAD_5_F;
+        world.cells = DEAD_5_F;
         // when
-        int counter = world.countFriends(1, 1, cells);
+        int counter = world.countFriends(1, 1);
         // then
         Assert.assertEquals(5, counter);
     }
@@ -173,8 +170,9 @@ public class WorldTest {
     @Test (dataProvider = "shouldKillMidCell")
     public void shouldKillCellInMiddle(Boolean[][] cells) {
         // given
+        world.cells = cells;
         // when
-        world.evolveCell(1, 1, cells);
+        world.evolveCell(1, 1);
         boolean cell = cells[1][1];
         // then
         Assert.assertFalse(cell);
@@ -183,8 +181,9 @@ public class WorldTest {
     @Test(dataProvider = "shouldReviveMidCell")
     public void shouldReviveCellInMiddle(Boolean[][] cells) {
         // given
+        world.cells = cells;
         // when
-        world.evolveCell(1, 1, cells);
+        world.evolveCell(1, 1);
         boolean cell = cells[1][1];
         // then
         Assert.assertTrue(cell);

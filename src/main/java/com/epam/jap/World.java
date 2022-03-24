@@ -2,6 +2,9 @@ package com.epam.jap;
 
 import java.util.Random;
 
+/**
+ * Class that contains all methods necessary to create living game world.
+ */
 public class World {
 
     public int height;
@@ -11,13 +14,13 @@ public class World {
     public World() {
     }
 
-    public World(int height, int width, Boolean[][] cells) {
+    World(int height, int width, Boolean[][] cells) {
         this.height = height;
         this.width = width;
         this.cells = cells;
     }
 
-    public void createNewWorld(int height, int width) {
+    void createNewWorld(int height, int width) {
         Boolean[][] cells = new Boolean[height][width];
         Random random = new Random();
         for (int row = 0; row < height; row++) {
@@ -32,16 +35,16 @@ public class World {
         Game.world = new World(height, width, cells);
     }
 
-    public void evolve() {
-        for (int i = 1; i < width - 1; i++) {
-            for (int j = 1; j < height - 1; j++) {
-                evolveCell(i, j, cells);
+    void evolve() {
+        for (int row = 1; row < width - 1; row++) {
+            for (int col = 1; col < height - 1; col++) {
+                evolveCell(row, col);
             }
         }
     }
 
-    public void evolveCell(int row, int col, Boolean[][] cells) {
-        int counter = countFriends(row, col, cells);
+    void evolveCell(int row, int col) {
+        int counter = countFriends(row, col);
         if (cells[row][col] && (counter < 2 || counter > 3)) {
             cells[row][col] = false;
         }
@@ -50,7 +53,7 @@ public class World {
         }
     }
 
-    public int countFriends(int row, int col, Boolean[][] cells) {
+    int countFriends(int row, int col) {
         int counter = 0;
         if (cells[row][col]) {
             counter--;

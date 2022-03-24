@@ -2,11 +2,10 @@ package com.epam.jap;
 
 import java.io.PrintStream;
 
-import static com.epam.jap.Game.world;
+class Printer {
 
-public class Printer {
-
-    private PrintStream out;
+    private final PrintStream out;
+    private final World world = new World();
 
     public Printer(PrintStream out) {
         this.out = out;
@@ -40,7 +39,7 @@ public class Printer {
         out.print("\u251B");
     }
 
-    public void printWorld() {
+    void printWorld(World world) {
         for (int row = 0; row < world.height; row++) {
             for (int col = 0; col < world.width; col++) {
                 if (row == 0 || row == world.height - 1) {
@@ -64,5 +63,4 @@ public class Printer {
             out.println();
         }
     }
-
 }
