@@ -1,7 +1,5 @@
 package com.epam.jap;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -10,36 +8,21 @@ import java.io.PrintStream;
 
 public class PrinterTest {
 
-    Printer printer = new Printer(System.out);
+
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-
-    @BeforeAll
-    public void setUpStreams() {
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-
-//    @AfterAll
-//    public void restoreStreams()  {
-//        System.setOut(originalOut);
-//        System.setErr(errContent);
-//    }
+    Printer printer = new Printer(new PrintStream(outContent));
 
     public void testPrintCell() {
     }
 
-//    public void testPrintHorizontalBorder() {
-//        // given
-//        originalOut.print("\u2501");
-//        // when
-//        printer.printHorizontalBorder();
-//        printer(horizontal)
-//        // then
-//        Assert.assertEquals(originalOut.print("\u2501"), originalOut);
-//    }
+    @Test
+    public void testPrintHorizontalBorder() {
+        // given
+        // when
+        printer.printHorizontalBorder();
+        // then
+        Assert.assertEquals(outContent.toString(),"\u2501");
+    }
 
     public void testPrintVerticalBorder() {
     }

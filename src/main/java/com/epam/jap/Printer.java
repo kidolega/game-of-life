@@ -1,10 +1,8 @@
 package com.epam.jap;
 
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static com.epam.jap.Game.world;
-import static java.lang.System.out;
 
 public class Printer {
 
