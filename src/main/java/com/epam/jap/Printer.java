@@ -12,7 +12,7 @@ public class Printer {
         this.out = out;
     }
 
-    private void printCell(int row, int col, World world) {
+    void printCell(int row, int col, World world) {
         out.print(world.cells[row][col] ? "\u25CF" : " ");
     }
 
@@ -37,11 +37,8 @@ public class Printer {
     }
 
     void printBotRightCorner() {
-        out.println("\u251B");
+        out.print("\u251B");
     }
-
-
-
 
     public void printWorld() {
         for (int row = 0; row < world.height; row++) {
@@ -62,7 +59,6 @@ public class Printer {
                     printVerticalBorder();
                 } else {
                     printCell(row, col, world);
-//                    out.print("X");
                 }
             }
             out.println();
