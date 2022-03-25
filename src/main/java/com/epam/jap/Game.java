@@ -18,7 +18,7 @@ public record Game(World world, Printer printer) {
 
 
         Printer printer = new Printer(System.out);
-        World world = new World(4, 8);
+        World world = new World(10, 20);
         Game game = new Game(world, printer);
         game.play();
 
@@ -27,13 +27,12 @@ public record Game(World world, Printer printer) {
     void play() {
 
         world.initializeWorld();
-
         Boolean[][] cellsCopy;
 
         do {
             cellsCopy = createCellsCopy(world.cells);
             printer.printWorld(world);
-            world.evolve();
+            world.evolveWorld();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

@@ -10,6 +10,7 @@ public class World {
     public int height;
     public int width;
     public Boolean[][] cells;
+    public Boolean[][] futureCells;
 
     World(int height, int width) {
         this.height = height;
@@ -29,23 +30,25 @@ public class World {
                 }
             }
         }
+        futureCells = Game.createCellsCopy(cells);
     }
 
-    void evolve() {
+    void evolveWorld() {
         for (int row = 1; row < width - 1; row++) {
             for (int col = 1; col < height - 1; col++) {
                 evolveCell(row, col);
             }
         }
+        cells = Game.createCellsCopy(futureCells);
     }
 
     void evolveCell(int row, int col) {
         int counter = countFriends(row, col);
         if (cells[col][row] && (counter < 2 || counter > 3)) {
-            cells[col][row] = false;
+            futureCells[col][row] = false;
         }
         if (!cells[col][row] && counter == 3) {
-            cells[col][row] = true;
+            futureCells[col][row] = true;
         }
     }
 
