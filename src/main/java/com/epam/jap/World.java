@@ -11,6 +11,10 @@ public class World {
     public int width;
     public Boolean[][] cells;
     public Boolean[][] futureCells;
+    public Boolean[][] pastCells;
+
+    public World() {
+    }
 
     World(int height, int width) {
         this.height = height;

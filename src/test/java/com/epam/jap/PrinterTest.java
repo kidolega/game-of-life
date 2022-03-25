@@ -7,17 +7,23 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import static com.epam.jap.Game.createCellsCopy;
+import static java.lang.System.out;
+
 @Test
 public class PrinterTest {
 
-
+    static World world;
     static ByteArrayOutputStream outContent;
     static Printer printer;
+    private Game game;
 
     @BeforeMethod
     private void setUp() {
+        world = new World(3, 3);
         outContent = new ByteArrayOutputStream();
         printer = new Printer(new PrintStream(outContent));
+        game = new Game(world, printer);
     }
 
     public void shouldPrintAliveCell() {
@@ -59,5 +65,20 @@ public class PrinterTest {
         printer.printWorld(world);
         // then
         Assert.assertEquals(outContent.toString(), expectedString);
+    }
+
+    @Test
+    public void shouldWait500MillisTillNextWorldPrint() {
+        // given
+        world.initializeWorld();
+        Boolean[][] cellsCopy = createCellsCopy(world.cells);
+        // when
+        long start = System.currentTimeMillis();
+        printer.printCurrentWorld(game, world);
+        long finnish = System.currentTimeMillis();
+        long timeElapsed = finnish - start;
+        out.println(timeElapsed);
+        // then
+        Assert.assertTrue(timeElapsed >= 500 && timeElapsed <= 505);
     }
 }

@@ -179,27 +179,30 @@ public class WorldTest {
 //        assertTrue(cell);
 //    }
 //
-//    @Test(dataProvider = "shouldChangeStateAfterEvolve")
-//    public void worldShouldChange(Boolean[][] cells) {
-//        // given
-//        world.cells = createCellsCopy(cells);
-//        Boolean[][] tempCells = createCellsCopy(cells);
-//        // when
-//        world.evolveWorld();
-//        // then
-//        assertFalse(game.compareOriginalCellsWithEvolved(tempCells));
-//    }
-//
-//    @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-//    public void worldShouldNotChange(Boolean[][] cells) {
-//        // given
-//        world.cells = cells;
-//        Boolean[][] tempCells = createCellsCopy(cells);
-//        // when
-//        world.evolveWorld();
-//        // then
-//        assertTrue(game.compareOriginalCellsWithEvolved(tempCells));
-//    }
+    @Test(dataProvider = "shouldChangeStateAfterEvolve")
+    public void worldShouldChange(Boolean[][] cells) {
+        // given
+        world.cells = createCellsCopy(cells);
+        world.futureCells = createCellsCopy(world.cells);
+        Boolean[][] tempCells = createCellsCopy(cells);
+        // when
+        world.evolveWorld();
+        // then
+        assertFalse(game.compareFutureCellsWithEvolved(tempCells));
+    }
+
+    @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
+    public void worldShouldNotChange(Boolean[][] cells) {
+        // given
+        world.cells = cells;
+        Boolean[][] tempCells = createCellsCopy(cells);
+        world.futureCells = createCellsCopy(world.cells);
+
+        // when
+        world.evolveWorld();
+        // then
+        assertTrue(game.compareFutureCellsWithEvolved(tempCells));
+    }
 
     @Test
     public void shouldPassIfCreatedWorldIsNotEmpty() {

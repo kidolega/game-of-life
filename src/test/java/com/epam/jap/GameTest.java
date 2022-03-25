@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static com.epam.jap.Game.createCellsCopy;
+import static java.lang.System.out;
 
 public class GameTest {
 
@@ -20,7 +21,7 @@ public class GameTest {
     @BeforeMethod
     public void setUp() {
         world = new World(3, 3);
-        printer = new Printer(System.out);
+        printer = new Printer(out);
         game = new Game(world, printer);
         outContent = new ByteArrayOutputStream();
     }
@@ -48,5 +49,16 @@ public class GameTest {
         game.play();
         // then
         Assert.assertNotNull(outContent.toString());
+    }
+
+    @Test
+    public void passIfReturnedWorldEqualsCurrent() {
+        // given
+        world.initializeWorld();
+        Boolean[][] cellsCopy = createCellsCopy(world.cells);
+        // when
+        printer.printCurrentWorld(game, world);
+        // then
+        Assert.assertEquals(world.futureCells, world.cells);
     }
 }

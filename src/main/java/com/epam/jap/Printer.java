@@ -2,6 +2,8 @@ package com.epam.jap;
 
 import java.io.PrintStream;
 
+import static com.epam.jap.Game.createCellsCopy;
+
 class Printer {
 
     private final PrintStream out;
@@ -43,5 +45,12 @@ class Printer {
             }
             out.println();
         }
+    }
+
+    void printCurrentWorld(Game game, World world) {
+        world.pastCells = createCellsCopy(world.cells);
+        printWorld(world);
+        world.evolveWorld();
+        game.waitTillNextEvolution(500);
     }
 }
