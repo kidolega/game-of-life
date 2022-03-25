@@ -11,8 +11,8 @@ import java.io.PrintStream;
 public class PrinterTest {
 
 
-    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    Printer printer = new Printer(new PrintStream(outContent));
+    static ByteArrayOutputStream outContent;
+    static Printer printer;
 
     @BeforeMethod
     private void setUp() {
@@ -23,7 +23,7 @@ public class PrinterTest {
     public void shouldPrintAliveCell() {
         // given
         World world = new World(1, 1);
-        world.cells = new Boolean[][] {{true}};
+        world.cells = new Boolean[][]{{true}};
         // when
         printer.printCell(0, 0, world);
         //then
@@ -33,61 +33,31 @@ public class PrinterTest {
     public void shouldPrintDeadCell() {
         // given
         World world = new World(1, 1);
-        world.cells = new Boolean[][] {{false}};
+        world.cells = new Boolean[][]{
+                {false}
+        };
         // when
         printer.printCell(0, 0, world);
-        //then
+        // then
         Assert.assertEquals(outContent.toString(), " ");
     }
 
-    public void testPrintHorizontalBorderSymbol() {
-        // given
-        // when
-        printer.printHorizontalBorder();
-        // then
-        Assert.assertEquals(outContent.toString(),"\u2501");
-    }
-
-    public void testPrintVerticalBorderSymbol() {
-        // given
-        // when
-        printer.printVerticalBorder();
-        // then
-        Assert.assertEquals(outContent.toString(), "\u2503");
-    }
-
-    public void testPrintTopLeftCorner() {
-        // given
-        // when
-        printer.printTopLeftCorner();
-        // then
-        Assert.assertEquals(outContent.toString(), "\u250F");
-    }
-
-    public void testPrintTopRightCorner() {
-        // given
-        // when
-        printer.printTopRightCorner();
-        // then
-        Assert.assertEquals(outContent.toString(), "\u2513");
-    }
-
-    public void testPrintBotLeftCorner() {
-        // given
-        // when
-        printer.printBotLeftCorner();
-        // then
-        Assert.assertEquals(outContent.toString(), "\u2517");
-    }
-
-    public void testPrintBotRightCorner() {
-        // given
-        // when
-        printer.printBotRightCorner();
-        // then
-        Assert.assertEquals(outContent.toString(), "\u251B");
-    }
-
     public void testPrintWorld() {
+        // given
+        World world = new World(3, 3);
+        world.cells = new Boolean[][] {
+                {false, false, false},
+                {false, true, false},
+                {false, false, false}
+        };
+        String expectedString = """
+                \u250F\u2501\u2513
+                \u2503\u25CF\u2503
+                \u2517\u2501\u251B
+                """;
+        // when
+        printer.printWorld(world);
+        // then
+        Assert.assertEquals(outContent.toString(), expectedString);
     }
 }

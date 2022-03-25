@@ -1,76 +1,88 @@
 package com.epam.jap;
 
-import org.junit.Assert;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import static com.epam.jap.Game.createCellsCopy;
+import static org.testng.AssertJUnit.*;
+
 public class WorldTest {
 
+    private World world;
+    private Printer printer;
     private Game game;
-    World world = new World(3, 3);
 
-    private static final Boolean[][] ALIVE_0_F= new Boolean[][]{
+    @BeforeMethod
+    public void setUp() {
+        world = new World(3, 3);
+        printer = new Printer(System.out);
+        game = new Game(world, printer);
+    }
+
+    private static final Boolean[][] ALIVE_0_F = new Boolean[][]{
             {false, false, false},
             {false, true, false},
             {false, false, false}
     };
 
-    private static final Boolean[][] ALIVE_1_F= new Boolean[][]{
+    private static final Boolean[][] ALIVE_1_F = new Boolean[][]{
             {true, false, false},
             {false, true, false},
             {false, false, false}
     };
 
-    private static final Boolean[][] ALIVE_2_F= new Boolean[][]{
+    private static final Boolean[][] ALIVE_2_F = new Boolean[][]{
             {true, true, false},
             {false, true, false},
             {false, false, false}
     };
 
-    private static final Boolean[][] ALIVE_3_F= new Boolean[][]{
+    private static final Boolean[][] ALIVE_3_F = new Boolean[][]{
             {true, true, true},
             {false, true, false},
             {false, false, false}
     };
 
-    private static final Boolean[][] ALIVE_4_F= new Boolean[][]{
+    private static final Boolean[][] ALIVE_4_F = new Boolean[][]{
             {true, true, true},
             {true, true, false},
             {false, false, false}
     };
 
-    private static final Boolean[][] ALIVE_5_F= new Boolean[][]{
+    private static final Boolean[][] ALIVE_5_F = new Boolean[][]{
             {true, true, true},
             {true, true, false},
             {false, false, true}
     };
 
-    private static final Boolean[][] DEAD_0_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_0_F = new Boolean[][]{
             {false, false, false},
             {false, false, false},
             {false, false, false}
     };
-    private static final Boolean[][] DEAD_1_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_1_F = new Boolean[][]{
             {true, false, false},
             {false, false, false},
             {false, false, false}
     };
-    private static final Boolean[][] DEAD_2_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_2_F = new Boolean[][]{
             {true, true, false},
             {false, false, false},
             {false, false, false}
     };
-    private static final Boolean[][] DEAD_3_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_3_F = new Boolean[][]{
             {true, true, true},
             {false, false, false},
             {false, false, false}
     };
-    private static final Boolean[][] DEAD_4_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_4_F = new Boolean[][]{
             {true, true, true},
             {true, false, false},
             {false, false, false}
     };
-    private static final Boolean[][] DEAD_5_F= new Boolean[][]{
+    private static final Boolean[][] DEAD_5_F = new Boolean[][]{
             {true, true, true},
             {true, false, true},
             {false, false, false}
@@ -78,21 +90,33 @@ public class WorldTest {
 
 
     @DataProvider
-    Object[][] shouldNotChangeState() {
-        return new Object[][] {
+    Object[][] shouldNotChangeStateAfterEvolve() {
+        return new Object[][]{
                 ALIVE_2_F,
                 ALIVE_3_F,
                 DEAD_0_F,
                 DEAD_1_F,
                 DEAD_2_F,
                 DEAD_4_F,
-
+                DEAD_5_F
         };
     }
 
     @DataProvider
+    Object[][] shouldChangeStateAfterEvolve() {
+        return new Object[][]{
+                ALIVE_0_F,
+                ALIVE_1_F,
+                ALIVE_4_F,
+                ALIVE_5_F,
+                DEAD_3_F,
+        };
+    }
+
+
+    @DataProvider
     Object[][] shouldKillMidCell() {
-        return new Object[][] {
+        return new Object[][]{
                 ALIVE_0_F,
                 ALIVE_1_F,
                 ALIVE_4_F,
@@ -102,90 +126,88 @@ public class WorldTest {
 
     @DataProvider
     Object[][] shouldReviveMidCell() {
-        return new Object[][] {
+        return new Object[][]{
                 DEAD_3_F
         };
     }
 
-    @Test
-    public void counterShouldReturn0IfAliveCellHas0Friends() {
+    @DataProvider
+    Object[][] cellsAndFriends() {
+        return new Object[][] {
+                {ALIVE_0_F, 0},
+                {ALIVE_1_F, 1},
+                {ALIVE_2_F, 2},
+                {ALIVE_3_F, 3},
+                {ALIVE_5_F, 5},
+                {DEAD_0_F, 0},
+                {DEAD_1_F, 1},
+                {DEAD_2_F, 2},
+                {DEAD_3_F, 3},
+                {DEAD_5_F, 5},
+        };
+    }
+
+    @Test (dataProvider = "cellsAndFriends")
+    public void expectedFriendsShouldEqualCellFriends(Boolean[][] cells, int friends) {
         // given
-        world.cells = ALIVE_0_F;
+        world.cells = createCellsCopy(cells);
         // when
         int counter = world.countFriends(1, 1);
         // then
-        Assert.assertEquals(0, counter);
+        assertEquals(friends, counter);
     }
 
-    @Test
-    public void counterShouldReturn1IfAliveCellHas1Friend() {
-        // given
-        world.cells = ALIVE_1_F;
-        // when
-        int counter = world.countFriends(1, 1);
-        // then
-        Assert.assertEquals(1, counter);
-    }
-
-    @Test
-    public void counterShouldReturn5IfAliveCellHas5Friends() {
-        // given
-        world.cells = ALIVE_5_F;
-        // when
-        int counter = world.countFriends(1, 1);
-        // then
-        Assert.assertEquals(5, counter);
-    }
-
-    @Test
-    public void counterShouldReturn0IfDeadCellHas0Friends() {
-        // given
-        world.cells = DEAD_0_F;
-        // when
-        int counter = world.countFriends(1, 1);
-        // then
-        Assert.assertEquals(0, counter);
-    }
-
-    @Test
-    public void counterShouldReturn1IfDeadCellHas1Friend() {
-        // given
-        world.cells = DEAD_1_F;
-        // when
-        int counter = world.countFriends(1, 1);
-        // then
-        Assert.assertEquals(1, counter);
-    }
-
-    @Test
-    public void counterShouldReturn5IfDeadCellHas5Friends() {
-        // given
-        world.cells = DEAD_5_F;
-        // when
-        int counter = world.countFriends(1, 1);
-        // then
-        Assert.assertEquals(5, counter);
-    }
-
-    @Test (dataProvider = "shouldKillMidCell")
+    @Test(dataProvider = "shouldKillMidCell")
     public void shouldKillCellInMiddle(Boolean[][] cells) {
         // given
-        world.cells = cells;
+        world.cells = createCellsCopy(cells);
         // when
         world.evolveCell(1, 1);
-        boolean cell = cells[1][1];
+        boolean cell = world.cells[1][1];
         // then
-        Assert.assertFalse(cell);
+        assertFalse(cell);
     }
 
     @Test(dataProvider = "shouldReviveMidCell")
     public void shouldReviveCellInMiddle(Boolean[][] cells) {
         // given
-        world.cells = cells;
+        world.cells = createCellsCopy(cells);
         // when
         world.evolveCell(1, 1);
-        boolean cell = cells[1][1];
+        boolean cell = world.cells[1][1];
         // then
-        Assert.assertTrue(cell);
+        assertTrue(cell);
+    }
+
+    @Test(dataProvider = "shouldChangeStateAfterEvolve")
+    public void worldShouldChange(Boolean[][] cells) {
+        // given
+        world.cells = createCellsCopy(cells);
+        Boolean[][] tempCells = createCellsCopy(cells);
+        // when
+        world.evolve();
+        // then
+        assertFalse(game.compareOriginalCellsWithEvolved(tempCells));
+    }
+
+    @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
+    public void worldShouldNotChange(Boolean[][] cells) {
+        // given
+        world.cells = cells;
+        Boolean[][] tempCells = createCellsCopy(cells);
+        // when
+        world.evolve();
+        // then
+        assertTrue(game.compareOriginalCellsWithEvolved(tempCells));
+    }
+
+    @Test
+    public void shouldPassIfCreatedWorldIsNotEmpty() {
+        // given
+        World world = new World(3, 3);
+        // when
+        world.initializeWorld();
+        // then
+        Assert.assertNotNull(world.cells[1][1]);
     }
 }

@@ -2,34 +2,26 @@ package com.epam.jap;
 
 import java.util.Arrays;
 
-public class Game {
-
-    private World world;
-    private final Printer printer;
-
-    public Game(World world, Printer printer) {
-        this.world = world;
-        this.printer = printer;
-    }
-
+public record Game(World world, Printer printer) {
 
     public static void main(String[] args) {
 
-        play();
+
+        Printer printer = new Printer(System.out);
+        World world = new World(4, 8);
+        Game game = new Game(world, printer);
+        game.play();
 
     }
 
-    private static void play() {
-
-        Printer printer = new Printer(System.out);
-        World world = new World(10, 20);
+    void play() {
 
         world.initializeWorld();
 
         Boolean[][] cellsCopy;
 
         do {
-            cellsCopy = createCellsCopy(world);
+            cellsCopy = createCellsCopy(world.cells);
             printer.printWorld(world);
             world.evolve();
             try {
@@ -37,17 +29,17 @@ public class Game {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } while (!compareOriginalCellsWithEvolved(world, cellsCopy));
+        } while (!compareOriginalCellsWithEvolved(cellsCopy));
     }
 
-    private static Boolean[][] createCellsCopy(World world) {
-        return Arrays.stream(world.cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
+    static Boolean[][] createCellsCopy(Boolean[][] cells) {
+        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
     }
 
-    private static boolean compareOriginalCellsWithEvolved(World world, Boolean[][] tempCells) {
-        for (int i = 0; i < tempCells.length; i++) {
-            for (int j = 0; j < tempCells[0].length; j++) {
-                if (tempCells[i][j] != world.cells[i][j]) {
+    boolean compareOriginalCellsWithEvolved(Boolean[][] cells) {
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[0].length; j++) {
+                if (cells[i][j] != world.cells[i][j]) {
                     return false;
                 }
             }
