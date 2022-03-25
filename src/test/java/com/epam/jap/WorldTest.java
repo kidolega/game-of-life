@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class WorldTest {
 
     private Game game;
-    World world = new World();
+    World world = new World(3, 3);
 
     private static final Boolean[][] ALIVE_0_F= new Boolean[][]{
             {false, false, false},

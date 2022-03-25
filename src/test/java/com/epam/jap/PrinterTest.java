@@ -22,9 +22,8 @@ public class PrinterTest {
 
     public void shouldPrintAliveCell() {
         // given
-        int row = 1;
-        int col = 1;
-        World world = new World(1, 1, new Boolean[][] {{true}});
+        World world = new World(1, 1);
+        world.cells = new Boolean[][] {{true}};
         // when
         printer.printCell(0, 0, world);
         //then
@@ -33,9 +32,8 @@ public class PrinterTest {
 
     public void shouldPrintDeadCell() {
         // given
-        int row = 1;
-        int col = 1;
-        World world = new World(1, 1, new Boolean[][] {{false}});
+        World world = new World(1, 1);
+        world.cells = new Boolean[][] {{false}};
         // when
         printer.printCell(0, 0, world);
         //then

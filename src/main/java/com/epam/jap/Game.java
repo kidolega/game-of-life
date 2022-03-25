@@ -2,42 +2,49 @@ package com.epam.jap;
 
 import java.util.Arrays;
 
-import static java.lang.System.out;
-
 public class Game {
 
-    static World world = new World();
-    static Printer printer = new Printer(out);
-//    static Boolean[][] cellsCopy;
+    private World world;
+    private final Printer printer;
+
+    public Game(World world, Printer printer) {
+        this.world = world;
+        this.printer = printer;
+    }
+
 
     public static void main(String[] args) {
 
-        initialize();
+        play();
+
     }
 
-    private static void initialize() {
+    private static void play() {
 
-        world.initializeWorld(5, 5);
+        Printer printer = new Printer(System.out);
+        World world = new World(10, 20);
+
+        world.initializeWorld();
+
         Boolean[][] cellsCopy;
 
         do {
-            cellsCopy = Arrays.stream(world.cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
+            cellsCopy = createCellsCopy(world);
             printer.printWorld(world);
             world.evolve();
-            compareCellSets(cellsCopy);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } while (!compareCellSets(cellsCopy));
+        } while (!compareOriginalCellsWithEvolved(world, cellsCopy));
     }
 
-//    private static Boolean[][] createCellsCopy() {
-//        return Arrays.stream(world.cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
-//    }
+    private static Boolean[][] createCellsCopy(World world) {
+        return Arrays.stream(world.cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
+    }
 
-    private static boolean compareCellSets(Boolean[][] tempCells) {
+    private static boolean compareOriginalCellsWithEvolved(World world, Boolean[][] tempCells) {
         for (int i = 0; i < tempCells.length; i++) {
             for (int j = 0; j < tempCells[0].length; j++) {
                 if (tempCells[i][j] != world.cells[i][j]) {

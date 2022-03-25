@@ -5,7 +5,6 @@ import java.io.PrintStream;
 class Printer {
 
     private final PrintStream out;
-    private final World world = new World();
 
     public Printer(PrintStream out) {
         this.out = out;

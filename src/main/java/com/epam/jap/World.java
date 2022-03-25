@@ -11,17 +11,14 @@ public class World {
     public int width;
     public Boolean[][] cells;
 
-    public World() {
-    }
-
-    World(int height, int width, Boolean[][] cells) {
+    public World(int height, int width) {
         this.height = height;
         this.width = width;
-        this.cells = cells;
+        cells = new Boolean[height][width];
     }
 
-    void initializeWorld(int height, int width) {
-        Boolean[][] cells = new Boolean[height][width];
+    void initializeWorld() {
+        cells = new Boolean[height][width];
         Random random = new Random();
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -32,7 +29,6 @@ public class World {
                 }
             }
         }
-        Game.world = new World(height, width, cells);
     }
 
     void evolve() {
@@ -45,22 +41,22 @@ public class World {
 
     void evolveCell(int row, int col) {
         int counter = countFriends(row, col);
-        if (cells[row][col] && (counter < 2 || counter > 3)) {
-            cells[row][col] = false;
+        if (cells[col][row] && (counter < 2 || counter > 3)) {
+            cells[col][row] = false;
         }
-        if (!cells[row][col] && counter == 3) {
-            cells[row][col] = true;
+        if (!cells[col][row] && counter == 3) {
+            cells[col][row] = true;
         }
     }
 
     int countFriends(int row, int col) {
         int counter = 0;
-        if (cells[row][col]) {
+        if (cells[col][row]) {
             counter--;
         }
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                if (cells[row + i][col + j]) {
+                if (cells[col + i][row + j]) {
                     counter++;
                 }
             }
