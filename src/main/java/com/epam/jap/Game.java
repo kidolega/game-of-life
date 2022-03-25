@@ -2,8 +2,18 @@ package com.epam.jap;
 
 import java.util.Arrays;
 
+/**
+ * Creates The Game.
+ *
+ * @Author Marcin Dolega
+ */
 public record Game(World world, Printer printer) {
 
+    /**
+     * Starts The Game.
+     *
+     * @param args shouldn't be written.
+     */
     public static void main(String[] args) {
 
 

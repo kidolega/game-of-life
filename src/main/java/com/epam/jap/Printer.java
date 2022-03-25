@@ -5,12 +5,12 @@ import java.io.PrintStream;
 class Printer {
 
     private final PrintStream out;
-    private final String HORIZONTAL_BORDER = "\u2501";
-    private final String VERTICAL_BORDER = "\u2503";
-    private final String TOP_LEFT_CORNER = "\u250F";
-    private final String TOP_RIGHT_CORNER = "\u2513";
-    private final String BOT_LEFT_CORNER = "\u2517";
-    private final String BOT_RIGHT_CORNER = "\u251B";
+    private final String horizontalBorder = "\u2501"; // prints ━
+    private final String verticalBorder = "\u2503"; // prints ┃
+    private final String topLeftCorner = "\u250F";  // prints ┏
+    private final String topRightCorner = "\u2513"; // prints ┓
+    private final String botLeftCorner = "\u2517"; // prints ┗
+    private final String botRightCorner = "\u251B"; // prints ┛
 
     public Printer(PrintStream out) {
         this.out = out;
@@ -25,18 +25,18 @@ class Printer {
             for (int col = 0; col < world.width; col++) {
                 if (row == 0 || row == world.height - 1) {
                     if (row == 0 && col == 0) {
-                        out.print(TOP_LEFT_CORNER);
+                        out.print(topLeftCorner);
                     } else if (row == 0 && col == world.width - 1) {
-                        out.print(TOP_RIGHT_CORNER);
+                        out.print(topRightCorner);
                     } else if (row == world.height - 1 && col == 0) {
-                        out.print(BOT_LEFT_CORNER);
+                        out.print(botLeftCorner);
                     } else if (row == world.height - 1 && col == world.width - 1) {
-                        out.print(BOT_RIGHT_CORNER);
+                        out.print(botRightCorner);
                     } else {
-                        out.print(HORIZONTAL_BORDER);
+                        out.print(horizontalBorder);
                     }
                 } else if (col == 0 || col == world.width - 1) {
-                    out.print(VERTICAL_BORDER);
+                    out.print(verticalBorder);
                 } else {
                     printCell(row, col, world);
                 }

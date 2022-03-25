@@ -11,7 +11,7 @@ public class World {
     public int width;
     public Boolean[][] cells;
 
-    public World(int height, int width) {
+    World(int height, int width) {
         this.height = height;
         this.width = width;
         cells = new Boolean[height][width];
