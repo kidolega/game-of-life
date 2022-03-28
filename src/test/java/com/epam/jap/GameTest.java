@@ -1,14 +1,9 @@
 package com.epam.jap;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
-import static com.epam.jap.Game.createCellsCopy;
 import static java.lang.System.out;
 
 public class GameTest {

@@ -33,11 +33,7 @@ public record Game(World world, Printer printer) {
         world.initializeWorld();
         do {
             printer.printCurrentWorld(this, world);
-        } while (true);
-    }
-
-    static Boolean[][] createCellsCopy(Boolean[][] cells) {
-        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
+        } while (!world.currentGeneration.cells.equals(world.currentGeneration.futureCells));
     }
 
     void waitTillNextEvolution(int timeInMillis) {

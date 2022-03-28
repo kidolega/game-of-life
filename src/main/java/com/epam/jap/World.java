@@ -35,15 +35,11 @@ public class World {
             }
         }
         currentGeneration = new Generation(cells);
-        futureGeneration = currentGeneration.clone();
+//        futureGeneration = currentGeneration.clone();
     }
 
     void evolveWorld() {
         currentGeneration.evolve();
-    }
-
-    int countFriends(int row, int col) {
-        return currentGeneration.countFriends(row, col);
     }
 
 }

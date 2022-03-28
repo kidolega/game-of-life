@@ -5,9 +5,12 @@ import java.util.Arrays;
 class Generation implements Cloneable {
 
     Boolean[][] cells;
+    Boolean[][] futureCells;
+    Boolean[][] pastCells;
 
     Generation(Boolean[][] cells) {
         this.cells = cells;
+        futureCells = cells.clone();
     }
 
     @Override
@@ -43,23 +46,25 @@ class Generation implements Cloneable {
         return counter;
     }
 
-    void evolveCell(int row, int col, Generation futureGeneration) {
+    void evolveCell(int row, int col) {
         int counter = countFriends(row, col);
+
         if (cells[col][row] && (counter < 2 || counter > 3)) {
-            futureGeneration.cells[col][row] = false;
+            futureCells[col][row] = false;
         }
         if (!cells[col][row] && counter == 3) {
-            futureGeneration.cells[col][row] = true;
+            futureCells[col][row] = true;
         }
     }
 
     Generation evolve() {
         Generation generation = clone();
-        for (int row = 1; row < cells.length - 1; row++) {
-            for (int col = 1; col < cells[0].length - 1; col++) {
-                evolveCell(row, col, generation);
+        for (int row = 1; row < cells[0].length - 1; row++) {
+            for (int col = 1; col < cells.length - 1; col++) {
+                evolveCell(row, col);
             }
         }
+//        generation.cells = futureCells;
         return generation;
     }
 }

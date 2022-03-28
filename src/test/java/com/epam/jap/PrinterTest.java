@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static com.epam.jap.Game.createCellsCopy;
 import static java.lang.System.out;
 
 @Test
