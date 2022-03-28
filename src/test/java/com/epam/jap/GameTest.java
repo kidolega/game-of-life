@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
@@ -15,12 +16,11 @@ public class GameTest {
     private World world;
     private Printer printer;
     private Game game;
-
     static ByteArrayOutputStream outContent;
 
     @BeforeMethod
     public void setUp() {
-        world = new World(3, 3);
+        world = new World(0, 0);
         printer = new Printer(out);
         game = new Game(world, printer);
         outContent = new ByteArrayOutputStream();

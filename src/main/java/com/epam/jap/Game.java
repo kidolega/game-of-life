@@ -18,12 +18,13 @@ public record Game(World world, Printer printer) {
      *
      * @param args shouldn't be written.
      */
+
     public static void main(String[] args) {
 
         Printer printer = new Printer(System.out);
         World world = new World();
         Game game = new Game(world, printer);
-        game.getWorldDimensions();
+        game.setWorldDimensions();
         game.play();
 
     }
@@ -58,23 +59,25 @@ public record Game(World world, Printer printer) {
         }
     }
 
-    void getWorldDimensions() {
-        String width;
-        String height;
+    int getSideSizeFromUser(String axis) {
+        String string;
         Pattern pattern = Pattern.compile("^[1-9][0-9]*$");
         Matcher matcher;
         do {
-            System.out.println("Enter world width:");
-            width = scanner.next();
-            matcher = pattern.matcher(width);
-        } while (!matcher.matches() || Integer.parseInt(width) < 1);
-            world.width = Integer.parseInt(width);
+            System.out.println("Enter world " + axis + ":");
+            string = scanner.next();
+            matcher = pattern.matcher(string);
+        } while (!matcher.matches() || Integer.parseInt(string) < 1);
+        if (axis.equals("width")) {
+            return Integer.parseInt(string);
+        } else if (axis.equals("height")) {
+            return Integer.parseInt(string);
+        }
+        return 0;
+    }
 
-        do {
-            System.out.println("Enter world height:");
-            height = scanner.next();
-            matcher = pattern.matcher(height);
-        } while (!matcher.matches() || Integer.parseInt(height) < 1);
-        world.height = Integer.parseInt(height);
+    void setWorldDimensions() {
+        world.width = getSideSizeFromUser("width");
+        world.height = getSideSizeFromUser("height");
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.jap;
 
 import static com.epam.jap.Game.createCellsCopy;
+
 import java.io.PrintStream;
 
 
