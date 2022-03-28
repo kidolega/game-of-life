@@ -33,22 +33,11 @@ public record Game(World world, Printer printer) {
         world.initializeWorld();
         do {
             printer.printCurrentWorld(this, world);
-        } while (!compareFutureCellsWithEvolved(world.pastCells));
+        } while (!compareCurrentCellsWithEvolved(world.pastCells));
     }
 
     static Boolean[][] createCellsCopy(Boolean[][] cells) {
         return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
-    }
-
-    boolean compareFutureCellsWithEvolved(Boolean[][] cells) {
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[0].length; j++) {
-                if (cells[i][j] != world.futureCells[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     void waitTillNextEvolution(int timeInMillis) {

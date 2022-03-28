@@ -71,7 +71,6 @@ public class PrinterTest {
     public void shouldWait500MillisTillNextWorldPrint() {
         // given
         world.initializeWorld();
-        Boolean[][] cellsCopy = createCellsCopy(world.cells);
         // when
         long start = System.currentTimeMillis();
         printer.printCurrentWorld(game, world);

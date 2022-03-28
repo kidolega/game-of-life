@@ -1,5 +1,6 @@
 package com.epam.jap;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -9,9 +10,9 @@ public class World {
 
     public int height;
     public int width;
-    public Boolean[][] cells;
-    public Boolean[][] futureCells;
-    public Boolean[][] pastCells;
+    private Generation currentGeneration;
+    private Generation futureGeneration;
+    private Generation pastGeneration;
 
     public World() {
     }
@@ -23,7 +24,7 @@ public class World {
     }
 
     void initializeWorld() {
-        cells = new Boolean[height][width];
+        Boolean[][] cells = new Boolean[height][width];
         Random random = new Random();
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -34,40 +35,16 @@ public class World {
                 }
             }
         }
-        futureCells = Game.createCellsCopy(cells);
+        currentGeneration = new Generation(cells);
+        futureGeneration = currentGeneration.clone();
     }
 
     void evolveWorld() {
-        for (int row = 1; row < width - 1; row++) {
-            for (int col = 1; col < height - 1; col++) {
-                evolveCell(row, col);
-            }
-        }
-        cells = Game.createCellsCopy(futureCells);
-    }
 
-    void evolveCell(int row, int col) {
-        int counter = countFriends(row, col);
-        if (cells[col][row] && (counter < 2 || counter > 3)) {
-            futureCells[col][row] = false;
-        }
-        if (!cells[col][row] && counter == 3) {
-            futureCells[col][row] = true;
-        }
     }
 
     int countFriends(int row, int col) {
-        int counter = 0;
-        if (cells[col][row]) {
-            counter--;
-        }
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if (cells[col + i][row + j]) {
-                    counter++;
-                }
-            }
-        }
-        return counter;
+        return currentGeneration.countFriends(row, col);
     }
+
 }

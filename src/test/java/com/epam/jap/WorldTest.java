@@ -188,7 +188,7 @@ public class WorldTest {
         // when
         world.evolveWorld();
         // then
-        assertFalse(game.compareFutureCellsWithEvolved(tempCells));
+        assertFalse(game.compareCurrentCellsWithEvolved(tempCells));
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
@@ -201,7 +201,7 @@ public class WorldTest {
         // when
         world.evolveWorld();
         // then
-        assertTrue(game.compareFutureCellsWithEvolved(tempCells));
+        assertTrue(game.compareCurrentCellsWithEvolved(tempCells));
     }
 
     @Test
