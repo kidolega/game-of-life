@@ -10,9 +10,9 @@ public class World {
 
     public int height;
     public int width;
-    private Generation currentGeneration;
-    private Generation futureGeneration;
-    private Generation pastGeneration;
+    Generation currentGeneration;
+    Generation futureGeneration;
+    Generation pastGeneration;
 
     public World() {
     }
@@ -20,7 +20,6 @@ public class World {
     World(int height, int width) {
         this.height = height;
         this.width = width;
-        cells = new Boolean[height][width];
     }
 
     void initializeWorld() {
@@ -40,7 +39,7 @@ public class World {
     }
 
     void evolveWorld() {
-
+        currentGeneration.evolve();
     }
 
     int countFriends(int row, int col) {

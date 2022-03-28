@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 class Generation implements Cloneable {
 
-    private Boolean[][] cells;
+    Boolean[][] cells;
 
     Generation(Boolean[][] cells) {
         this.cells = cells;

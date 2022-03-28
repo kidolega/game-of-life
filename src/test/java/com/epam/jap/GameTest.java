@@ -26,39 +26,39 @@ public class GameTest {
         outContent = new ByteArrayOutputStream();
     }
 
-    @Test
-    public void copiedCellsEqualsOriginalCells() {
-        // given
-        world.cells = new Boolean[][] {
-                {false, false, false},
-                {false, true, false},
-                {false, false, false}
-        };
-        Boolean[][] cellsCopy;
-        // when
-        cellsCopy = createCellsCopy(world.cells);
-        // then
-        Assert.assertEquals(cellsCopy, world.cells);
-    }
-
-    @Test
-    public void shouldPrintGame() {
-        // given
-        printer = new Printer(new PrintStream(outContent));
-        // when
-        game.play();
-        // then
-        Assert.assertNotNull(outContent.toString());
-    }
-
-    @Test
-    public void passIfReturnedWorldEqualsCurrent() {
-        // given
-        world.initializeWorld();
-        Boolean[][] cellsCopy = createCellsCopy(world.cells);
-        // when
-        printer.printCurrentWorld(game, world);
-        // then
-        Assert.assertEquals(world.futureCells, world.cells);
-    }
+//    @Test
+//    public void copiedCellsEqualsOriginalCells() {
+//        // given
+//        world.cells = new Boolean[][] {
+//                {false, false, false},
+//                {false, true, false},
+//                {false, false, false}
+//        };
+//        Boolean[][] cellsCopy;
+//        // when
+//        cellsCopy = createCellsCopy(world.cells);
+//        // then
+//        Assert.assertEquals(cellsCopy, world.cells);
+//    }
+//
+//    @Test
+//    public void shouldPrintGame() {
+//        // given
+//        printer = new Printer(new PrintStream(outContent));
+//        // when
+//        game.play();
+//        // then
+//        Assert.assertNotNull(outContent.toString());
+//    }
+//
+//    @Test
+//    public void passIfReturnedWorldEqualsCurrent() {
+//        // given
+//        world.initializeWorld();
+//        Boolean[][] cellsCopy = createCellsCopy(world.cells);
+//        // when
+//        printer.printCurrentWorld(game, world);
+//        // then
+//        Assert.assertEquals(world.futureCells, world.cells);
+//    }
 }
