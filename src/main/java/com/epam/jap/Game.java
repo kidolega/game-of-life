@@ -2,6 +2,8 @@ package com.epam.jap;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Creates The Game.
@@ -21,12 +23,7 @@ public record Game(World world, Printer printer) {
         Printer printer = new Printer(System.out);
         World world = new World();
         Game game = new Game(world, printer);
-
-        System.out.println("Enter world width:");
-        world.width = scanner.nextInt();
-        System.out.println("Enter world height:");
-        world.height = scanner.nextInt();
-
+        game.getWorldDimensions();
         game.play();
 
     }
@@ -57,6 +54,27 @@ public record Game(World world, Printer printer) {
         try {
             Thread.sleep(timeInMillis);
         } catch (InterruptedException ignore) {
+            ignore.printStackTrace();
         }
+    }
+
+    void getWorldDimensions() {
+        String width;
+        String height;
+        Pattern pattern = Pattern.compile("^[1-9][0-9]*$");
+        Matcher matcher;
+        do {
+            System.out.println("Enter world width:");
+            width = scanner.next();
+            matcher = pattern.matcher(width);
+        } while (!matcher.matches() || Integer.parseInt(width) < 1);
+            world.width = Integer.parseInt(width);
+
+        do {
+            System.out.println("Enter world height:");
+            height = scanner.next();
+            matcher = pattern.matcher(height);
+        } while (!matcher.matches() || Integer.parseInt(height) < 1);
+        world.height = Integer.parseInt(height);
     }
 }

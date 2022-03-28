@@ -1,8 +1,8 @@
 package com.epam.jap;
 
+import static com.epam.jap.Game.createCellsCopy;
 import java.io.PrintStream;
 
-import static com.epam.jap.Game.createCellsCopy;
 
 class Printer {
 
@@ -19,7 +19,7 @@ class Printer {
     }
 
     void printCell(int row, int col, World world) {
-        out.print(world.cells[row][col] ? "\u25CF" : " ");
+        out.print(world.cells[row][col] ? "\u25CF" : " "); // prints ●
     }
 
     void printWorld(World world) {
