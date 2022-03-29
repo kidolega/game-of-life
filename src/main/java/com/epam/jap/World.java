@@ -41,5 +41,4 @@ public class World {
     void evolveWorld() {
         currentGeneration.evolve();
     }
-
 }

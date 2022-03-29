@@ -1,55 +1,60 @@
 package com.epam.jap;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static org.testng.AssertJUnit.assertFalse;
-import static org.testng.AssertJUnit.assertTrue;
+import static com.epam.jap.PrinterTest.world;
+import static org.testng.AssertJUnit.*;
 
 public class WorldTest {
-
-    private World world;
-    private Printer printer;
-    private Game game;
 
     @BeforeMethod
     public void setUp() {
         world = new World(3, 3);
-        printer = new Printer(System.out);
-        game = new Game(world, printer);
     }
 
-//    @Test (dataProvider = "cellsAndFriends")
-//    public void expectedFriendsShouldEqualCellFriends(Boolean[][] cells, int friends) {
-//        // given
-//        world.pastGeneration.cells = cells;
-//        // when
-//        int counter = world.countFriends(1, 1);
-//        // then
-//        assertEquals(friends, counter);
-//    }
+    @Test
+    public void worldShouldChange() {
+        // given
+        world.currentGeneration = new Generation(AlIVE_0_F);
+        world.pastGeneration = world.currentGeneration.clone();
+        // when
+        world.evolveWorld();
+        // then
+        assertNotSame(world.currentGeneration, world.pastGeneration);
+    }
 
+    @Test
+    public void worldShouldNotChange() {
+        // given
+        world.currentGeneration = new Generation(DEAD_0_F);
+        world.pastGeneration = world.currentGeneration.clone();
+        // when
+        world.evolveWorld();
+        // then
+        assertEquals(world.currentGeneration, world.pastGeneration);
+    }
 
-//    @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-//    public void worldShouldNotChange(Boolean[][] cells) {
-//        // given
-//        world.cells = cells;
-//        Boolean[][] tempCells = createCellsCopy(cells);
-//        world.futureCells = createCellsCopy(world.cells);
-//
-//        // when
-//        world.evolveWorld();
-//        // then
-//        assertTrue(game.compareCurrentCellsWithEvolved(tempCells));
-//    }
-//
-//    @Test
-//    public void shouldPassIfCreatedWorldIsNotEmpty() {
-//        // given
-//        World world = new World(3, 3);
-//        // when
-//        world.initializeWorld();
-//        // then
-//        Assert.assertNotNull(world.cells[1][1]);
-//    }
+    @Test
+    public void shouldPassIfCreatedWorldIsNotEmpty() {
+        // given
+        World world = new World(3, 3);
+        // when
+        world.initializeWorld();
+        // then
+        Assert.assertNotNull(world.currentGeneration.currentCells);
+    }
+
+    private static final Boolean[][] DEAD_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, false, false},
+            {false, false, false}
+    };
+
+    private static final Boolean[][] AlIVE_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, true, false},
+            {false, false, false}
+    };
 }

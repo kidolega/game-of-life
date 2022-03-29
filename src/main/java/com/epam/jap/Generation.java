@@ -6,12 +6,11 @@ class Generation implements Cloneable {
 
     Boolean[][] originalCells;
     Boolean[][] currentCells;
-    Boolean[][] futureCells;
+    Boolean[][] pastCells;
 
-    Generation(Boolean[][] cells) {
-        this.originalCells = cells;
-        this.currentCells = cells;
-        this.futureCells = cells;
+    Generation(Boolean[][] original) {
+        this.originalCells = original;
+        this.currentCells = copyCells(originalCells);
     }
 
     @Override
@@ -29,26 +28,33 @@ class Generation implements Cloneable {
 
     @Override
     public Generation clone() {
-        return new Generation(Arrays.stream(currentCells).map(Boolean[]::clone).toArray(Boolean[][]::new));
+        return new Generation(Arrays.stream(originalCells).map(Boolean[]::clone).toArray(Boolean[][]::new));
     }
 
-    void evolve() {
-//        originalCells = currentCells.clone();
-        for (int row = 1; row < originalCells[0].length - 1; row++) {
-            for (int col = 1; col < originalCells.length - 1; col++) {
+    public Boolean[][] copyCells(Boolean[][] cells) {
+        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
+    }
+
+    Generation evolve() {
+//        currentCells = originalCells.clone();
+//        copyCells(originalCells);
+        for (int row = 1; row < originalCells.length - 1; row++) {
+            for (int col = 1; col < originalCells[0].length - 1; col++) {
                 evolveCell(row, col);
             }
         }
+        pastCells = copyCells(originalCells);
+        originalCells = copyCells(currentCells);
+        return new Generation(currentCells);
     }
 
     void evolveCell(int row, int col) {
         int counter = countFriends(row, col);
-
-        if (originalCells[col][row] && (counter < 2 || counter > 3)) {
-            currentCells[col][row] = false;
+        if (originalCells[row][col] && (counter < 2 || counter > 3)) {
+            currentCells[row][col] = false;
         }
-        if (!originalCells[col][row] && counter == 3) {
-            currentCells[col][row] = true;
+        if (!originalCells[row][col] && counter == 3) {
+            currentCells[row][col] = true;
         }
     }
 
