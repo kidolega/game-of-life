@@ -33,7 +33,7 @@ public record Game(World world, Printer printer) {
         world.initializeWorld();
         do {
             printer.printCurrentWorld(this, world);
-        } while (!world.currentGeneration.cells.equals(world.currentGeneration.futureCells));
+        } while (Arrays.deepEquals(world.currentGeneration.originalCells, world.currentGeneration.futureCells));
     }
 
     void waitTillNextEvolution(int timeInMillis) {

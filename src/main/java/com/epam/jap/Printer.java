@@ -18,7 +18,7 @@ class Printer {
     }
 
     void printCell(int row, int col, World world) {
-        out.print(world.currentGeneration.cells[row][col] ? "\u25CF" : " "); // prints ●
+        out.print(world.currentGeneration.futureCells[row][col] ? "\u25CF" : " "); // prints ●
     }
 
     void printWorld(World world) {
