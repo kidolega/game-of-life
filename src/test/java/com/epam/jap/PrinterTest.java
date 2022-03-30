@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Scanner;
 
 import static java.lang.System.out;
 
@@ -23,7 +22,7 @@ public class PrinterTest {
         world = new World(3, 3);
         outContent = new ByteArrayOutputStream();
         printer = new Printer(new PrintStream(outContent));
-        game = new Game(world, printer, new Scanner(System.in));
+        game = new Game(world, printer);
         world.generation = new Generation(new Boolean[3][3]);
     }
 

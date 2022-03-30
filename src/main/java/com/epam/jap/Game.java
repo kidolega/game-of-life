@@ -1,8 +1,7 @@
 package com.epam.jap;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
  *
  * @Author Marcin Dolega
  */
-public record Game(World world, Printer printer, Scanner scanner) {
+public record Game(World world, Printer printer) {
 
     /**
      * Starts The Game.
@@ -25,8 +24,8 @@ public record Game(World world, Printer printer, Scanner scanner) {
 
         Printer printer = new Printer(System.out);
         World world = new World(0, 0);
-        Game game = new Game(world, printer, new Scanner(System.in));
-        game.setWorldDimensions();
+        Game game = new Game(world, printer);
+        game.setWorldDimensions(new Scanner(System.in));
         game.play();
 
     }
@@ -48,7 +47,7 @@ public record Game(World world, Printer printer, Scanner scanner) {
         }
     }
 
-    int getSideSizeFromUser(String axis) {
+    int getSideSizeFromUser(@NotNull String axis, @NotNull Scanner scanner) {
         String string;
         Pattern pattern = Pattern.compile("^[1-9][0-9]*$");
         Matcher matcher;
@@ -56,7 +55,7 @@ public record Game(World world, Printer printer, Scanner scanner) {
             System.out.println("Enter world " + axis + ":");
             string = scanner.nextLine();
             matcher = pattern.matcher(string);
-        } while (!matcher.matches() || Integer.parseInt(string) < 1);
+        } while (!matcher.matches());
         if (axis.equals("width")) {
             return Integer.parseInt(string);
         } else if (axis.equals("height")) {
@@ -65,8 +64,8 @@ public record Game(World world, Printer printer, Scanner scanner) {
         return 0;
     }
 
-    void setWorldDimensions() {
-        world.width = getSideSizeFromUser("width");
-        world.height = getSideSizeFromUser("height");
+    void setWorldDimensions(Scanner scanner) {
+        world.width = getSideSizeFromUser("width", scanner);
+        world.height = getSideSizeFromUser("height", scanner);
     }
 }
