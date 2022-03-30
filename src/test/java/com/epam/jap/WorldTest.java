@@ -24,7 +24,7 @@ public class WorldTest {
         // when
         world.evolveWorld();
         // then
-        assertNotSame(world.generation.currentCells, world.generation.pastCells);
+        assertNotSame(world.generation.evolvedCells, world.generation.originalCells);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class WorldTest {
         // when
         world.evolveWorld();
         // then
-        assertTrue(Arrays.deepEquals(world.generation.currentCells, world.generation.pastCells));
+        assertTrue(Arrays.deepEquals(world.generation.evolvedCells, world.generation.originalCells));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class WorldTest {
         // when
         world.initializeWorld();
         // then
-        Assert.assertNotNull(world.generation.currentCells);
+        Assert.assertNotNull(world.generation.evolvedCells);
     }
 
     private static final Boolean[][] DEAD_0_F = new Boolean[][]{

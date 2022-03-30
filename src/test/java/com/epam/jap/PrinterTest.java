@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 import static java.lang.System.out;
 
@@ -22,49 +23,45 @@ public class PrinterTest {
         world = new World(3, 3);
         outContent = new ByteArrayOutputStream();
         printer = new Printer(new PrintStream(outContent));
-        game = new Game(world, printer);
+        game = new Game(world, printer, new Scanner(System.in));
+        world.generation = new Generation(new Boolean[3][3]);
     }
 
-//    public void shouldPrintAliveCell() {
-//        // given
-//        World world = new World(1, 1);
-//        world.cells = new Boolean[][]{{true}};
-//        // when
-//        printer.printCell(0, 0, world);
-//        //then
-//        Assert.assertEquals(outContent.toString(), "\u25CF");
-//    }
-//
-//    public void shouldPrintDeadCell() {
-//        // given
-//        World world = new World(1, 1);
-//        world.cells = new Boolean[][]{
-//                {false}
-//        };
-//        // when
-//        printer.printCell(0, 0, world);
-//        // then
-//        Assert.assertEquals(outContent.toString(), " ");
-//    }
-//
-//    public void testPrintWorld() {
-//        // given
-//        World world = new World(3, 3);
-//        world.cells = new Boolean[][] {
-//                {false, false, false},
-//                {false, true, false},
-//                {false, false, false}
-//        };
-//        String expectedString = """
-//                \u250F\u2501\u2513
-//                \u2503\u25CF\u2503
-//                \u2517\u2501\u251B
-//                """;
-//        // when
-//        printer.printWorld(world);
-//        // then
-//        Assert.assertEquals(outContent.toString(), expectedString);
-//    }
+    public void shouldPrintAliveCell() {
+        // given
+        world.generation.evolvedCells[1][1] = true;
+        // when
+        printer.printCell(1, 1, world);
+        //then
+        Assert.assertEquals(outContent.toString(), "\u25CF");
+    }
+
+    public void shouldPrintDeadCell() {
+        // given
+        world.generation.evolvedCells[1][1] = false;
+        // when
+        printer.printCell(1, 1, world);
+        //then
+        Assert.assertEquals(outContent.toString(), " ");
+    }
+
+    public void testPrintWorld() {
+        // given
+        world.generation.evolvedCells = new Boolean[][] {
+                {false, false, false},
+                {false, true, false},
+                {false, false, false}
+        };
+        String expectedString = """
+                \u250F\u2501\u2513
+                \u2503\u25CF\u2503
+                \u2517\u2501\u251B
+                """;
+        // when
+        printer.printWorld(world);
+        // then
+        Assert.assertEquals(outContent.toString(), expectedString);
+    }
 
     @Test
     public void shouldWait500MillisTillNextWorldPrint() {

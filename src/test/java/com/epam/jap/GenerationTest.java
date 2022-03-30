@@ -34,7 +34,7 @@ public class GenerationTest {
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolveCell(1, 1);
-        boolean cell = currentGeneration.currentCells[1][1];
+        boolean cell = currentGeneration.evolvedCells[1][1];
         // then
         assertFalse(cell);
     }
@@ -45,7 +45,7 @@ public class GenerationTest {
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolveCell(1, 1);
-        boolean cell = currentGeneration.currentCells[1][1];
+        boolean cell = currentGeneration.evolvedCells[1][1];
         // then
         assertTrue(cell);
     }
@@ -57,7 +57,7 @@ public class GenerationTest {
         // when
         currentGeneration.evolve();
         // then
-        assertNotSame(currentGeneration.pastCells, currentGeneration.currentCells);
+        assertNotSame(currentGeneration.originalCells, currentGeneration.evolvedCells);
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
@@ -67,7 +67,7 @@ public class GenerationTest {
         // when
         currentGeneration.evolve();
         // then
-        assertTrue(Arrays.deepEquals(currentGeneration.pastCells, currentGeneration.currentCells));
+        assertTrue(Arrays.deepEquals(currentGeneration.originalCells, currentGeneration.evolvedCells));
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
@@ -77,7 +77,7 @@ public class GenerationTest {
         // when
         currentGeneration.evolve();
         // then
-        assertNotSame(currentGeneration.currentCells[1][1], currentGeneration.pastCells[1][1]);
+        assertNotSame(currentGeneration.evolvedCells[1][1], currentGeneration.originalCells[1][1]);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
@@ -87,7 +87,7 @@ public class GenerationTest {
         // when
         generation.evolve();
         // then
-        assertFalse(Arrays.deepEquals(generation.currentCells, generation.pastCells));
+        assertFalse(Arrays.deepEquals(generation.evolvedCells, generation.originalCells));
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
@@ -97,15 +97,14 @@ public class GenerationTest {
         // when
         generation.evolve();
         // then
-        assertTrue(Arrays.deepEquals(generation.currentCells, generation.originalCells));
+        assertTrue(Arrays.deepEquals(generation.evolvedCells, generation.currentCells));
     }
 
     @Test
     public void shouldCloneGeneration() {
         // given
-        Generation clonedGeneration = new Generation(new Boolean[3][3]);
         // when
-        clonedGeneration = currentGeneration.clone();
+        Generation clonedGeneration = currentGeneration.clone();
         // then
         Assert.assertEquals(currentGeneration, clonedGeneration);
     }
@@ -115,9 +114,9 @@ public class GenerationTest {
         // given
         Generation clonedGeneration = new Generation(new Boolean[3][3]);
         // when
-        clonedGeneration.currentCells = currentGeneration.currentCells.clone();
+        clonedGeneration.evolvedCells = currentGeneration.evolvedCells.clone();
         // then
-        Assert.assertEquals(currentGeneration.currentCells, clonedGeneration.currentCells);
+        Assert.assertEquals(currentGeneration.evolvedCells, clonedGeneration.evolvedCells);
     }
 
     private static final Boolean[][] ALIVE_0_F = new Boolean[][]{

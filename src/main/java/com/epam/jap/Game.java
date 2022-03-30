@@ -1,5 +1,8 @@
 package com.epam.jap;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -10,9 +13,8 @@ import java.util.regex.Pattern;
  *
  * @Author Marcin Dolega
  */
-public record Game(World world, Printer printer) {
+public record Game(World world, Printer printer, Scanner scanner) {
 
-    static Scanner scanner = new Scanner(System.in);
     /**
      * Starts The Game.
      *
@@ -23,7 +25,7 @@ public record Game(World world, Printer printer) {
 
         Printer printer = new Printer(System.out);
         World world = new World(0, 0);
-        Game game = new Game(world, printer);
+        Game game = new Game(world, printer, new Scanner(System.in));
         game.setWorldDimensions();
         game.play();
 
@@ -33,12 +35,14 @@ public record Game(World world, Printer printer) {
         world.initializeWorld();
         do {
             printer.printCurrentWorld(this, world);
-        } while (!Arrays.deepEquals(world.generation.currentCells, world.generation.pastCells));
+            world.evolveWorld();
+            waitTillNextEvolution();
+        } while (!Arrays.deepEquals(world.generation.evolvedCells, world.generation.originalCells));
     }
 
-    void waitTillNextEvolution(int timeInMillis) {
+    void waitTillNextEvolution() {
         try {
-            Thread.sleep(timeInMillis);
+            Thread.sleep(500);
         } catch (InterruptedException ignore) {
             ignore.printStackTrace();
         }
@@ -50,7 +54,7 @@ public record Game(World world, Printer printer) {
         Matcher matcher;
         do {
             System.out.println("Enter world " + axis + ":");
-            string = scanner.next();
+            string = scanner.nextLine();
             matcher = pattern.matcher(string);
         } while (!matcher.matches() || Integer.parseInt(string) < 1);
         if (axis.equals("width")) {
