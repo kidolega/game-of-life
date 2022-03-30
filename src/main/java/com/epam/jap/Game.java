@@ -22,7 +22,7 @@ public record Game(World world, Printer printer) {
     public static void main(String[] args) {
 
         Printer printer = new Printer(System.out);
-        World world = new World();
+        World world = new World(0, 0);
         Game game = new Game(world, printer);
         game.setWorldDimensions();
         game.play();
@@ -33,7 +33,7 @@ public record Game(World world, Printer printer) {
         world.initializeWorld();
         do {
             printer.printCurrentWorld(this, world);
-        } while (!Arrays.deepEquals(world.currentGeneration.currentCells, world.currentGeneration.pastCells));
+        } while (!Arrays.deepEquals(world.generation.currentCells, world.generation.pastCells));
     }
 
     void waitTillNextEvolution(int timeInMillis) {

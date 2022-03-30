@@ -13,36 +13,13 @@ class Generation implements Cloneable {
         this.currentCells = copyCells(originalCells);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Generation that = (Generation) o;
-        return Arrays.deepEquals(currentCells, that.currentCells);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(currentCells);
-    }
-
-    @Override
-    public Generation clone() {
-        return new Generation(Arrays.stream(originalCells).map(Boolean[]::clone).toArray(Boolean[][]::new));
-    }
-
-    public Boolean[][] copyCells(Boolean[][] cells) {
-        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
-    }
-
     Generation evolve() {
-//        currentCells = originalCells.clone();
-//        copyCells(originalCells);
         for (int row = 1; row < originalCells.length - 1; row++) {
             for (int col = 1; col < originalCells[0].length - 1; col++) {
                 evolveCell(row, col);
             }
         }
+
         pastCells = copyCells(originalCells);
         originalCells = copyCells(currentCells);
         return new Generation(currentCells);
@@ -63,6 +40,10 @@ class Generation implements Cloneable {
         if (originalCells[row][col]) {
             counter--;
         }
+        return iterateOverClosestFriends(row, col, counter);
+    }
+
+    int iterateOverClosestFriends(int row, int col, int counter) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (originalCells[row + i][col + j]) {
@@ -70,6 +51,35 @@ class Generation implements Cloneable {
                 }
             }
         }
+
         return counter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Generation that = (Generation) o;
+        return Arrays.deepEquals(currentCells, that.currentCells);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(currentCells);
+    }
+
+    @Override
+    public Generation clone() {
+        return new Generation(Arrays.stream(originalCells)
+                .map(Boolean[]::clone)
+                .toArray(Boolean[][]::new));
+    }
+
+    public Boolean[][] copyCells(Boolean[][] cells) {
+        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
     }
 }

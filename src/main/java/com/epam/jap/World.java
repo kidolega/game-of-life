@@ -1,6 +1,5 @@
 package com.epam.jap;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -10,12 +9,7 @@ public class World {
 
     public int height;
     public int width;
-    Generation currentGeneration;
-    Generation futureGeneration;
-    Generation pastGeneration;
-
-    public World() {
-    }
+    Generation generation;
 
     World(int height, int width) {
         this.height = height;
@@ -34,11 +28,10 @@ public class World {
                 }
             }
         }
-        currentGeneration = new Generation(cells);
-//        futureGeneration = currentGeneration.clone();
+        generation = new Generation(cells);
     }
 
     void evolveWorld() {
-        currentGeneration.evolve();
+        generation.evolve();
     }
 }

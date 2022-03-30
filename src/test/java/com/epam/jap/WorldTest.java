@@ -4,6 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+
 import static com.epam.jap.PrinterTest.world;
 import static org.testng.AssertJUnit.*;
 
@@ -17,23 +19,23 @@ public class WorldTest {
     @Test
     public void worldShouldChange() {
         // given
-        world.currentGeneration = new Generation(AlIVE_0_F);
-        world.pastGeneration = world.currentGeneration.clone();
+        world.generation = new Generation(AlIVE_0_F);
+//        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then
-        assertNotSame(world.currentGeneration, world.pastGeneration);
+        assertNotSame(world.generation.currentCells, world.generation.pastCells);
     }
 
     @Test
     public void worldShouldNotChange() {
         // given
-        world.currentGeneration = new Generation(DEAD_0_F);
-        world.pastGeneration = world.currentGeneration.clone();
+        world.generation = new Generation(DEAD_0_F);
+//        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then
-        assertEquals(world.currentGeneration, world.pastGeneration);
+        assertTrue(Arrays.deepEquals(world.generation.currentCells, world.generation.pastCells));
     }
 
     @Test
@@ -43,7 +45,7 @@ public class WorldTest {
         // when
         world.initializeWorld();
         // then
-        Assert.assertNotNull(world.currentGeneration.currentCells);
+        Assert.assertNotNull(world.generation.currentCells);
     }
 
     private static final Boolean[][] DEAD_0_F = new Boolean[][]{

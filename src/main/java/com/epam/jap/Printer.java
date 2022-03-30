@@ -18,7 +18,7 @@ class Printer {
     }
 
     void printCell(int row, int col, World world) {
-        out.print(world.currentGeneration.currentCells[row][col] ? "\u25CF" : " "); // prints ●
+        out.print(world.generation.currentCells[row][col] ? "\u25CF" : " "); // prints ●
     }
 
     void printWorld(World world) {
@@ -47,7 +47,6 @@ class Printer {
     }
 
     void printCurrentWorld(Game game, World world) {
-//        world.pastGeneration = world.currentGeneration.clone();
         printWorld(world);
         world.evolveWorld();
         game.waitTillNextEvolution(500);

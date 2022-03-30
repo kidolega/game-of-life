@@ -11,14 +11,10 @@ import static org.testng.AssertJUnit.*;
 public class GenerationTest {
 
     Generation currentGeneration;
-    Generation futureGeneration;
-    Generation pastGeneration;
 
     @BeforeMethod
     void setUp() {
         currentGeneration = new Generation(new Boolean[3][3]);
-        futureGeneration = new Generation(new Boolean[3][3]);
-        pastGeneration = new Generation(new Boolean[3][3]);
     }
 
     @Test (dataProvider = "cellsAndFriends")
@@ -37,8 +33,7 @@ public class GenerationTest {
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolveCell(1, 1);
-        futureGeneration = new Generation(currentGeneration.currentCells);
-        boolean cell = futureGeneration.currentCells[1][1];
+        boolean cell = currentGeneration.currentCells[1][1];
         // then
         assertFalse(cell);
     }
@@ -49,8 +44,7 @@ public class GenerationTest {
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolveCell(1, 1);
-        futureGeneration = new Generation(currentGeneration.currentCells);
-        boolean cell = futureGeneration.currentCells[1][1];
+        boolean cell = currentGeneration.currentCells[1][1];
         // then
         assertTrue(cell);
     }
@@ -59,22 +53,20 @@ public class GenerationTest {
     public void worldShouldChange(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
-        futureGeneration = new Generation(currentGeneration.currentCells);
         // when
         currentGeneration.evolve();
         // then
-        assertNotSame(futureGeneration, currentGeneration);
+        assertNotSame(currentGeneration.pastCells, currentGeneration.currentCells);
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
     public void worldShouldNotChange(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
-        futureGeneration = new Generation(currentGeneration.currentCells);
         // when
         currentGeneration.evolve();
         // then
-        assertEquals(futureGeneration, currentGeneration);
+        assertTrue(Arrays.deepEquals(currentGeneration.pastCells, currentGeneration.currentCells));
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
@@ -85,16 +77,6 @@ public class GenerationTest {
         currentGeneration.evolve();
         // then
         assertNotSame(currentGeneration.currentCells[1][1], currentGeneration.pastCells[1][1]);
-    }
-
-    @Test
-    public void shouldCopyCurrentGeneration() {
-        // given
-        currentGeneration.currentCells = ALIVE_2_F;
-        // when
-        futureGeneration = currentGeneration.clone();
-        // then
-        assertTrue(Arrays.deepEquals(currentGeneration.originalCells, futureGeneration.originalCells));
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
