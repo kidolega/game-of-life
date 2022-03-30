@@ -1,5 +1,6 @@
 package com.epam.jap;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -97,6 +98,26 @@ public class GenerationTest {
         generation.evolve();
         // then
         assertTrue(Arrays.deepEquals(generation.currentCells, generation.originalCells));
+    }
+
+    @Test
+    public void shouldCloneGeneration() {
+        // given
+        Generation clonedGeneration = new Generation(new Boolean[3][3]);
+        // when
+        clonedGeneration = currentGeneration.clone();
+        // then
+        Assert.assertEquals(currentGeneration, clonedGeneration);
+    }
+
+    @Test
+    public void shouldCloneGenerationCells() {
+        // given
+        Generation clonedGeneration = new Generation(new Boolean[3][3]);
+        // when
+        clonedGeneration.currentCells = currentGeneration.currentCells.clone();
+        // then
+        Assert.assertEquals(currentGeneration.currentCells, clonedGeneration.currentCells);
     }
 
     private static final Boolean[][] ALIVE_0_F = new Boolean[][]{
