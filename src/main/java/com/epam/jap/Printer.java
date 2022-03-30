@@ -46,7 +46,7 @@ class Printer {
         }
     }
 
-    void printCurrentWorld(Game game, World world) {
+    void printCurrentWorld(World world) {
         printWorld(world);
     }
 }

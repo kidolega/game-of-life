@@ -68,7 +68,7 @@ public class PrinterTest {
         world.initializeWorld();
         // when
         long start = System.currentTimeMillis();
-        printer.printCurrentWorld(game, world);
+        game.waitTillNextEvolution();
         long finnish = System.currentTimeMillis();
         long timeElapsed = finnish - start;
         out.println(timeElapsed);
