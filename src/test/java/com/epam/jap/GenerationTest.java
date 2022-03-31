@@ -1,6 +1,5 @@
 package com.epam.jap;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -11,179 +10,206 @@ import static org.testng.AssertJUnit.*;
 
 public class GenerationTest {
 
-    Generation currentGeneration;
+    Population currentPopulation;
+    static Cell a = new Cell(true);
+    static Cell d = new Cell(false);
 
     @BeforeMethod
     void setUp() {
-        currentGeneration = new Generation(new Boolean[3][3]);
+        currentPopulation = new Population(new Cell[3][3]);
+        a = new Cell(true);
+        d = new Cell(false);
     }
 
     @Test (dataProvider = "cellsAndFriends")
-    public void expectedFriendsShouldEqualCellFriends(Boolean[][] cells, int friends) {
+    public void expectedFriendsShouldEqualCellFriends(Cell[][] cells, int friends) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        int counter = currentGeneration.countFriends(1, 1);
+        int counter = cells[1][1].countFriends(1, 1, currentPopulation);
         // then
         assertEquals(friends, counter);
     }
 
     @Test(dataProvider = "shouldKillMidCell")
-    public void shouldKillCellInMiddle(Boolean[][] cells) {
+    public void shouldKillCellInMiddle(Cell[][] cells) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        currentGeneration.evolveCell(1, 1);
-        boolean cell = currentGeneration.evolvedCells[1][1];
+        currentPopulation.currentGeneration[1][1].evolveCell(1, 1, currentPopulation);
+        boolean state = currentPopulation.evolvedGeneration[1][1].state;
         // then
-        assertFalse(cell);
+        assertFalse(state);
     }
 
     @Test(dataProvider = "shouldReviveMidCell")
-    public void shouldReviveCellInMiddle(Boolean[][] cells) {
+    public void shouldReviveCellInMiddle(Cell[][] cells) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        currentGeneration.evolveCell(1, 1);
-        boolean cell = currentGeneration.evolvedCells[1][1];
+        currentPopulation.currentGeneration[1][1].evolveCell(1, 1, currentPopulation);
+        boolean state = currentPopulation.evolvedGeneration[1][1].state;
         // then
-        assertTrue(cell);
+        assertTrue(state);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void worldShouldChange(Boolean[][] cells) {
+    public void worldShouldChange(Cell[][] cells) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        currentGeneration.evolve();
+        currentPopulation.evolveGeneration();
         // then
-        assertNotSame(currentGeneration.originalCells, currentGeneration.evolvedCells);
+        assertNotSame(currentPopulation.originalGeneration, currentPopulation.evolvedGeneration);
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-    public void worldShouldNotChange(Boolean[][] cells) {
+    public void worldShouldNotChange(Cell[][] cells) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        currentGeneration.evolve();
+        currentPopulation.evolveGeneration();
         // then
-        assertTrue(Arrays.deepEquals(currentGeneration.originalCells, currentGeneration.evolvedCells));
+        assertTrue(Arrays.deepEquals(currentPopulation.originalGeneration, currentPopulation.evolvedGeneration));
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void pastGenerationShouldEqualCurrent(Boolean[][] cells) {
+    public void pastGenerationShouldEqualCurrent(Cell[][] cells) {
         // given
-        currentGeneration = new Generation(cells);
+        currentPopulation = new Population(cells);
         // when
-        currentGeneration.evolve();
+//        currentGeneration.evolveGeneration();
+        currentPopulation.evolvedGeneration[1][1].state = false;
+        currentPopulation.originalGeneration[1][1].state = true;
         // then
-        assertNotSame(currentGeneration.evolvedCells[1][1], currentGeneration.originalCells[1][1]);
+        assertNotSame(currentPopulation.evolvedGeneration[1][1].state, currentPopulation.originalGeneration[1][1].state);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void currentCellsShouldDifferFromOriginalAfterEvolve(Boolean[][] cells) {
+    public void currentCellsShouldDifferFromOriginalAfterEvolve(Cell[][] cells) {
         // given
-        Generation generation = new Generation(cells);
+        Population population = new Population(cells);
         // when
-        generation.evolve();
+        population.evolveGeneration();
         // then
-        assertFalse(Arrays.deepEquals(generation.evolvedCells, generation.originalCells));
+        assertFalse(Arrays.deepEquals(population.evolvedGeneration, population.currentGeneration));
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-    public void currentCellsShouldEqualsOriginalAfterEvolve(Boolean[][] cells) {
+    public void currentCellsShouldEqualsOriginalAfterEvolve(Cell[][] cells) {
         // given
-        Generation generation = new Generation(cells);
+        Population population = new Population(cells);
         // when
-        generation.evolve();
+        population.evolveGeneration();
         // then
-        assertTrue(Arrays.deepEquals(generation.evolvedCells, generation.currentCells));
+        assertTrue(Arrays.deepEquals(population.evolvedGeneration, population.currentGeneration));
     }
 
     @Test
     public void shouldCloneGeneration() {
         // given
         // when
-        Generation clonedGeneration = currentGeneration.clone();
+        Population clonedPopulation = currentPopulation;
         // then
-        Assert.assertEquals(currentGeneration, clonedGeneration);
+        assertEquals(currentPopulation, clonedPopulation);
     }
 
     @Test
     public void shouldCloneGenerationCells() {
         // given
-        Generation clonedGeneration = new Generation(new Boolean[3][3]);
+        Population clonedPopulation = new Population(new Cell[3][3]);
         // when
-        clonedGeneration.evolvedCells = currentGeneration.evolvedCells.clone();
+        clonedPopulation.evolvedGeneration = currentPopulation.evolvedGeneration.clone();
         // then
-        Assert.assertEquals(currentGeneration.evolvedCells, clonedGeneration.evolvedCells);
+        assertEquals(currentPopulation.evolvedGeneration, clonedPopulation.evolvedGeneration);
     }
 
-    private static final Boolean[][] ALIVE_0_F = new Boolean[][]{
-            {false, false, false},
-            {false, true, false},
-            {false, false, false}
+    @Test
+    public void copiedCellsShouldEqualOriginal() {
+        // given
+        Cell[][] original = ALIVE_0_F;
+        // when
+        Cell[][] copied = original.clone();
+        // then
+        assertTrue(Arrays.deepEquals(copied, original));
+    }
+
+    @Test
+    public void copiedCellsShouldDifferFromOriginal() {
+        // given
+        Cell[][] original = ALIVE_0_F;
+        Cell[][] copied = original;
+        // when
+        copied[1][1].kill();
+        // then
+        assertFalse(Arrays.deepEquals(copied, original));
+    }
+
+    private static final Cell[][] ALIVE_0_F = new Cell[][]{
+            {d, d, d},
+            {d, a, d},
+            {d, d, d}
     };
 
-    private static final Boolean[][] ALIVE_1_F = new Boolean[][]{
-            {true, false, false},
-            {false, true, false},
-            {false, false, false}
+    private static final Cell[][] ALIVE_1_F = new Cell[][]{
+            {a, d, d},
+            {d, a, d},
+            {d, d, d}
     };
 
-    private static final Boolean[][] ALIVE_2_F = new Boolean[][]{
-            {true, true, false},
-            {false, true, false},
-            {false, false, false}
+    private static final Cell[][] ALIVE_2_F = new Cell[][]{
+            {a, a, d},
+            {d, a, d},
+            {d, d, d}
     };
 
-    private static final Boolean[][] ALIVE_3_F = new Boolean[][]{
-            {true, true, true},
-            {false, true, false},
-            {false, false, false}
+    private static final Cell[][] ALIVE_3_F = new Cell[][]{
+            {a, a, a},
+            {d, a, d},
+            {d, d, d}
     };
 
-    private static final Boolean[][] ALIVE_4_F = new Boolean[][]{
-            {true, true, true},
-            {true, true, false},
-            {false, false, false}
+    private static final Cell[][] ALIVE_4_F = new Cell[][]{
+            {a, a, a},
+            {a, a, d},
+            {d, d, d}
     };
 
-    private static final Boolean[][] ALIVE_5_F = new Boolean[][]{
-            {true, true, true},
-            {true, true, false},
-            {false, false, true}
+    private static final Cell[][] ALIVE_5_F = new Cell[][]{
+            {a, a, a},
+            {a, a, d},
+            {d, d, a}
     };
 
-    private static final Boolean[][] DEAD_0_F = new Boolean[][]{
-            {false, false, false},
-            {false, false, false},
-            {false, false, false}
+    private static final Cell[][] DEAD_0_F = new Cell[][]{
+            {d, d, d},
+            {d, d, d},
+            {d, d, d}
     };
-    private static final Boolean[][] DEAD_1_F = new Boolean[][]{
-            {true, false, false},
-            {false, false, false},
-            {false, false, false}
+    private static final Cell[][] DEAD_1_F = new Cell[][]{
+            {a, d, d},
+            {d, d, d},
+            {d, d, d}
     };
-    private static final Boolean[][] DEAD_2_F = new Boolean[][]{
-            {true, true, false},
-            {false, false, false},
-            {false, false, false}
+    private static final Cell[][] DEAD_2_F = new Cell[][]{
+            {a, a, d},
+            {d, d, d},
+            {d, d, d}
     };
-    private static final Boolean[][] DEAD_3_F = new Boolean[][]{
-            {true, true, true},
-            {false, false, false},
-            {false, false, false}
+    private static final Cell[][] DEAD_3_F = new Cell[][]{
+            {a, a, a},
+            {d, d, d},
+            {d, d, d}
     };
-    private static final Boolean[][] DEAD_4_F = new Boolean[][]{
-            {true, true, true},
-            {true, false, false},
-            {false, false, false}
+    private static final Cell[][] DEAD_4_F = new Cell[][]{
+            {a, a, a},
+            {a, d, d},
+            {d, d, d}
     };
-    private static final Boolean[][] DEAD_5_F = new Boolean[][]{
-            {true, true, true},
-            {true, false, true},
-            {false, false, false}
+    private static final Cell[][] DEAD_5_F = new Cell[][]{
+            {a, a, a},
+            {a, d, a},
+            {d, d, d}
     };
 
     @DataProvider

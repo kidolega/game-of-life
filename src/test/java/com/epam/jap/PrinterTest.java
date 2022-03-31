@@ -16,40 +16,42 @@ public class PrinterTest {
     static ByteArrayOutputStream outContent;
     static Printer printer;
     private Game game;
+    static final Cell a = new Cell(true);
+    static final Cell d = new Cell(false);
 
     @BeforeMethod
     private void setUp() {
-        world = new World(3, 3);
+        world = new World(new int[]{3,3});
         outContent = new ByteArrayOutputStream();
-        printer = new Printer(new PrintStream(outContent));
+        printer = new Printer(new PrintStream(outContent), world);
         game = new Game(world, printer);
-        world.generation = new Generation(new Boolean[3][3]);
+        world.population = new Population(new Cell[3][3]);
     }
 
     public void shouldPrintAliveCell() {
         // given
-        world.generation.evolvedCells[1][1] = true;
+        world.population.evolvedGeneration[1][1].state = true;
         // when
-        printer.printCell(1, 1, world);
+        printer.printCell(1, 1);
         //then
         Assert.assertEquals(outContent.toString(), "\u25CF");
     }
 
     public void shouldPrintDeadCell() {
         // given
-        world.generation.evolvedCells[1][1] = false;
+        world.population.evolvedGeneration[1][1].state = false;
         // when
-        printer.printCell(1, 1, world);
+        printer.printCell(1, 1);
         //then
         Assert.assertEquals(outContent.toString(), " ");
     }
 
     public void testPrintWorld() {
         // given
-        world.generation.evolvedCells = new Boolean[][] {
-                {false, false, false},
-                {false, true, false},
-                {false, false, false}
+        world.population.evolvedGeneration = new Cell[][] {
+                {d, d, d},
+                {d, a, d},
+                {d, d, d}
         };
         String expectedString = """
                 \u250F\u2501\u2513
@@ -57,7 +59,7 @@ public class PrinterTest {
                 \u2517\u2501\u251B
                 """;
         // when
-        printer.printWorld(world);
+        printer.printWorld();
         // then
         Assert.assertEquals(outContent.toString(), expectedString);
     }
@@ -65,7 +67,7 @@ public class PrinterTest {
     @Test
     public void shouldWait500MillisTillNextWorldPrint() {
         // given
-        world.initializeWorld();
+        world.population.initializeGeneration(3,3);
         // when
         long start = System.currentTimeMillis();
         game.waitTillNextEvolution();
