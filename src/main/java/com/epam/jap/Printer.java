@@ -18,7 +18,7 @@ class Printer {
     }
 
     void printCell(int row, int col, World world) {
-        out.print(world.generation.evolvedCells[row][col] ? "\u25CF" : " "); // prints ●
+        out.print(world.generation.evolvedCells[row][col].state ? "\u25CF" : " "); // prints ●
     }
 
     void printWorld(World world) {
