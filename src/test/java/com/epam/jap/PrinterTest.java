@@ -67,7 +67,7 @@ public class PrinterTest {
     @Test
     public void shouldWait500MillisTillNextWorldPrint() {
         // given
-        world.population.initializeGeneration(3,3);
+        world.population.initializePopulation(3,3);
         // when
         long start = System.currentTimeMillis();
         game.waitTillNextEvolution();

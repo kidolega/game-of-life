@@ -8,15 +8,15 @@ import java.util.Arrays;
 
 import static org.testng.AssertJUnit.*;
 
-public class GenerationTest {
+public class PopulationTest {
 
-    Population currentPopulation;
+    Population population;
     static Cell a = new Cell(true);
     static Cell d = new Cell(false);
 
     @BeforeMethod
     void setUp() {
-        currentPopulation = new Population(new Cell[3][3]);
+        population = new Population(new Cell[3][3]);
         a = new Cell(true);
         d = new Cell(false);
     }
@@ -24,9 +24,9 @@ public class GenerationTest {
     @Test (dataProvider = "cellsAndFriends")
     public void expectedFriendsShouldEqualCellFriends(Cell[][] cells, int friends) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-        int counter = cells[1][1].countFriends(1, 1, currentPopulation);
+        int counter = cells[1][1].countFriends(1, 1, population);
         // then
         assertEquals(friends, counter);
     }
@@ -34,10 +34,10 @@ public class GenerationTest {
     @Test(dataProvider = "shouldKillMidCell")
     public void shouldKillCellInMiddle(Cell[][] cells) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-        currentPopulation.currentGeneration[1][1].evolveCell(1, 1, currentPopulation);
-        boolean state = currentPopulation.evolvedGeneration[1][1].state;
+        population.currentGeneration[1][1].evolveCell(1, 1, population);
+        boolean state = population.evolvedGeneration[1][1].state;
         // then
         assertFalse(state);
     }
@@ -45,10 +45,10 @@ public class GenerationTest {
     @Test(dataProvider = "shouldReviveMidCell")
     public void shouldReviveCellInMiddle(Cell[][] cells) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-        currentPopulation.currentGeneration[1][1].evolveCell(1, 1, currentPopulation);
-        boolean state = currentPopulation.evolvedGeneration[1][1].state;
+        population.currentGeneration[1][1].evolveCell(1, 1, population);
+        boolean state = population.evolvedGeneration[1][1].state;
         // then
         assertTrue(state);
     }
@@ -56,33 +56,33 @@ public class GenerationTest {
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
     public void worldShouldChange(Cell[][] cells) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-        currentPopulation.evolveGeneration();
+        population.evolveGeneration();
         // then
-        assertNotSame(currentPopulation.originalGeneration, currentPopulation.evolvedGeneration);
+        assertNotSame(population.originalGeneration, population.evolvedGeneration);
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
     public void worldShouldNotChange(Cell[][] cells) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-        currentPopulation.evolveGeneration();
+        population.evolveGeneration();
         // then
-        assertTrue(Arrays.deepEquals(currentPopulation.originalGeneration, currentPopulation.evolvedGeneration));
+        assertTrue(Arrays.deepEquals(population.originalGeneration, population.evolvedGeneration));
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
     public void pastGenerationShouldEqualCurrent(Cell[][] cells) {
         // given
-        currentPopulation = new Population(cells);
+        population = new Population(cells);
         // when
-//        currentGeneration.evolveGeneration();
-        currentPopulation.evolvedGeneration[1][1].state = false;
-        currentPopulation.originalGeneration[1][1].state = true;
+        population.evolveGeneration();
+        population.evolvedGeneration[1][1].state = false;
+        population.originalGeneration[1][1].state = true;
         // then
-        assertNotSame(currentPopulation.evolvedGeneration[1][1].state, currentPopulation.originalGeneration[1][1].state);
+        assertNotSame(population.evolvedGeneration[1][1].state, population.originalGeneration[1][1].state);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
@@ -109,9 +109,9 @@ public class GenerationTest {
     public void shouldCloneGeneration() {
         // given
         // when
-        Population clonedPopulation = currentPopulation;
+        Population clonedPopulation = population;
         // then
-        assertEquals(currentPopulation, clonedPopulation);
+        assertEquals(population, clonedPopulation);
     }
 
     @Test
@@ -119,9 +119,9 @@ public class GenerationTest {
         // given
         Population clonedPopulation = new Population(new Cell[3][3]);
         // when
-        clonedPopulation.evolvedGeneration = currentPopulation.evolvedGeneration.clone();
+        clonedPopulation.evolvedGeneration = population.evolvedGeneration.clone();
         // then
-        assertEquals(currentPopulation.evolvedGeneration, clonedPopulation.evolvedGeneration);
+        assertEquals(population.evolvedGeneration, clonedPopulation.evolvedGeneration);
     }
 
     @Test
@@ -129,7 +129,8 @@ public class GenerationTest {
         // given
         Cell[][] original = ALIVE_0_F;
         // when
-        Cell[][] copied = original.clone();
+        Cell[][] copied = population.clone(original);
+        copied[1][1].kill();
         // then
         assertTrue(Arrays.deepEquals(copied, original));
     }
@@ -138,7 +139,7 @@ public class GenerationTest {
     public void copiedCellsShouldDifferFromOriginal() {
         // given
         Cell[][] original = ALIVE_0_F;
-        Cell[][] copied = original;
+        Cell[][] copied = population.clone(original);
         // when
         copied[1][1].kill();
         // then

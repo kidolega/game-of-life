@@ -28,7 +28,7 @@ public record Game(World world, Printer printer) {
     }
 
     void play() {
-        world.population.initializeGeneration(world.width, world().height);
+        world.population.initializePopulation(world.width, world().height);
         do {
             printer.printWorld();
             world.evolveWorld();

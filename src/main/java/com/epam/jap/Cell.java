@@ -1,5 +1,6 @@
 package com.epam.jap;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Cell {
@@ -53,4 +54,22 @@ public class Cell {
         }
         return counter;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) {
+//            return true;
+//        }
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//        Cell that = (Cell) o;
+//        return Arrays.deepEquals(state, that.state);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Arrays.deepHashCode(state);
+//    }
+
 }

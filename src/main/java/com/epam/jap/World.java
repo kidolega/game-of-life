@@ -12,9 +12,18 @@ public class World {
     World(int[] dimensions) {
         this.width = dimensions[0];
         this.height = dimensions[1];
-        this.population = new Population(new Cell[width][height]).initializeGeneration(width, height);
+        this.population = initializeDeadWorld(width, height);
     }
 
+    Population initializeDeadWorld(int width, int height) {
+        population.originalGeneration = new Cell[height][width];
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                population.originalGeneration[row][col] = new Cell(false);
+            }
+        }
+        return population;
+    }
     void evolveWorld() {
         population.evolveGeneration();
     }
