@@ -11,9 +11,6 @@ import static org.testng.AssertJUnit.*;
 
 public class WorldTest {
 
-    static final Cell a = new Cell(true);
-    static final Cell d = new Cell(false);
-
     @BeforeMethod
     public void setUp() {
         world = new World(3, 3);
@@ -41,25 +38,25 @@ public class WorldTest {
         assertTrue(Arrays.deepEquals(world.generation.evolvedCells, world.generation.originalCells));
     }
 
-//    @Test
-//    public void shouldPassIfCreatedWorldIsNotEmpty() {
-//        // given
-//        World world = new World(3, 3);
-//        // when
-//        world.initializeWorld();
-//        // then
-//        Assert.assertNotNull(world.generation.evolvedCells);
-//    }
+    @Test
+    public void shouldPassIfCreatedWorldIsNotEmpty() {
+        // given
+        World world = new World(3, 3);
+        // when
+        world.initializeWorld();
+        // then
+        Assert.assertNotNull(world.generation.evolvedCells);
+    }
 
-    private static final Cell[][] DEAD_0_F = new Cell[][]{
-            {d, d, d},
-            {d, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, false, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] AlIVE_0_F = new Cell[][]{
-            {d, d, d},
-            {d, a, d},
-            {d, d, d}
+    private static final Boolean[][] AlIVE_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, true, false},
+            {false, false, false}
     };
 }

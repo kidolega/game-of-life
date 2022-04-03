@@ -17,13 +17,14 @@ public class World {
     }
 
     void initializeWorld() {
-        Cell[][] cells = new Cell[height][width];
+        Boolean[][] cells = new Boolean[height][width];
+        Random random = new Random();
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 if (row == 0 || row == height - 1 || col == 0 || col == width - 1) {
-                    cells[row][col].kill();
+                    cells[row][col] = false;
                 } else {
-                    cells[row][col].initialize();
+                    cells[row][col] = random.nextBoolean();
                 }
             }
         }

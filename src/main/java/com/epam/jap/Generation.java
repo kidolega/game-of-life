@@ -4,18 +4,14 @@ import java.util.Arrays;
 
 class Generation implements Cloneable {
 
-    Cell[][] currentCells;
-    Cell[][] evolvedCells;
-    Cell[][] originalCells;
+    Boolean[][] currentCells;
+    Boolean[][] evolvedCells;
+    Boolean[][] originalCells;
 
-    Generation(Cell[][] original) {
+    Generation(Boolean[][] original) {
         this.currentCells = original;
         this.evolvedCells = copyCells(currentCells);
     }
-
-//    void initializeGeneration() {
-//        Arrays.stream(originalCells).toArray()
-//    }
 
     Generation evolve() {
         for (int row = 1; row < currentCells.length - 1; row++) {
@@ -31,17 +27,17 @@ class Generation implements Cloneable {
 
     void evolveCell(int row, int col) {
         int counter = countFriends(row, col);
-        if (currentCells[row][col].state && (counter < 2 || counter > 3)) {
-            evolvedCells[row][col].kill();
+        if (currentCells[row][col] && (counter < 2 || counter > 3)) {
+            evolvedCells[row][col] = false;
         }
-        if (!currentCells[row][col].state && counter == 3) {
-            evolvedCells[row][col].revive();
+        if (!currentCells[row][col] && counter == 3) {
+            evolvedCells[row][col] = true;
         }
     }
 
     int countFriends(int row, int col) {
         int counter = 0;
-        if (currentCells[row][col].state) {
+        if (currentCells[row][col]) {
             counter--;
         }
         return iterateOverClosestFriends(row, col, counter);
@@ -50,7 +46,7 @@ class Generation implements Cloneable {
     int iterateOverClosestFriends(int row, int col, int counter) {
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                if (currentCells[row + i][col + j].state) {
+                if (currentCells[row + i][col + j]) {
                     counter++;
                 }
             }
@@ -78,11 +74,11 @@ class Generation implements Cloneable {
     @Override
     public Generation clone() {
         return new Generation(Arrays.stream(currentCells)
-                .map(Cell[]::clone)
-                .toArray(Cell[][]::new));
+                .map(Boolean[]::clone)
+                .toArray(Boolean[][]::new));
     }
 
-    public Cell[][] copyCells(Cell[][] cells) {
-        return Arrays.stream(cells).map(Cell[]::clone).toArray(Cell[][]::new);
+    public Boolean[][] copyCells(Boolean[][] cells) {
+        return Arrays.stream(cells).map(Boolean[]::clone).toArray(Boolean[][]::new);
     }
 }

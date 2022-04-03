@@ -12,18 +12,14 @@ import static org.testng.AssertJUnit.*;
 public class GenerationTest {
 
     Generation currentGeneration;
-    static Cell a = new Cell(true);
-    static Cell d = new Cell(false);
 
     @BeforeMethod
     void setUp() {
-        currentGeneration = new Generation(new Cell[3][3]);
-        a = new Cell(true);
-        d = new Cell(false);
+        currentGeneration = new Generation(new Boolean[3][3]);
     }
 
     @Test (dataProvider = "cellsAndFriends")
-    public void expectedFriendsShouldEqualCellFriends(Cell[][] cells, int friends) {
+    public void expectedFriendsShouldEqualCellFriends(Boolean[][] cells, int friends) {
         // given
         currentGeneration = new Generation(cells);
         // when
@@ -33,29 +29,29 @@ public class GenerationTest {
     }
 
     @Test(dataProvider = "shouldKillMidCell")
-    public void shouldKillCellInMiddle(Cell[][] cells) {
-        // given
-        currentGeneration = new Generation(cells);
-        // when
-        currentGeneration.currentCells.evolveCell(1, 1);
-        boolean state = currentGeneration.evolvedCells[1][1].state;
-        // then
-        assertFalse(state);
-    }
-
-    @Test(dataProvider = "shouldReviveMidCell")
-    public void shouldReviveCellInMiddle(Cell[][] cells) {
+    public void shouldKillCellInMiddle(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolveCell(1, 1);
-        boolean state = currentGeneration.evolvedCells[1][1].state;
+        boolean cell = currentGeneration.evolvedCells[1][1];
         // then
-        assertTrue(state);
+        assertFalse(cell);
+    }
+
+    @Test(dataProvider = "shouldReviveMidCell")
+    public void shouldReviveCellInMiddle(Boolean[][] cells) {
+        // given
+        currentGeneration = new Generation(cells);
+        // when
+        currentGeneration.evolveCell(1, 1);
+        boolean cell = currentGeneration.evolvedCells[1][1];
+        // then
+        assertTrue(cell);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void worldShouldChange(Cell[][] cells) {
+    public void worldShouldChange(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
         // when
@@ -65,7 +61,7 @@ public class GenerationTest {
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-    public void worldShouldNotChange(Cell[][] cells) {
+    public void worldShouldNotChange(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
         // when
@@ -75,17 +71,17 @@ public class GenerationTest {
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void pastGenerationShouldEqualCurrent(Cell[][] cells) {
+    public void pastGenerationShouldEqualCurrent(Boolean[][] cells) {
         // given
         currentGeneration = new Generation(cells);
         // when
         currentGeneration.evolve();
         // then
-        assertNotSame(currentGeneration.evolvedCells[1][1].state, currentGeneration.originalCells[1][1].state);
+        assertNotSame(currentGeneration.evolvedCells[1][1], currentGeneration.originalCells[1][1]);
     }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
-    public void currentCellsShouldDifferFromOriginalAfterEvolve(Cell[][] cells) {
+    public void currentCellsShouldDifferFromOriginalAfterEvolve(Boolean[][] cells) {
         // given
         Generation generation = new Generation(cells);
         // when
@@ -95,7 +91,7 @@ public class GenerationTest {
     }
 
     @Test(dataProvider = "shouldNotChangeStateAfterEvolve")
-    public void currentCellsShouldEqualsOriginalAfterEvolve(Cell[][] cells) {
+    public void currentCellsShouldEqualsOriginalAfterEvolve(Boolean[][] cells) {
         // given
         Generation generation = new Generation(cells);
         // when
@@ -116,78 +112,78 @@ public class GenerationTest {
     @Test
     public void shouldCloneGenerationCells() {
         // given
-        Generation clonedGeneration = new Generation(new Cell[3][3]);
+        Generation clonedGeneration = new Generation(new Boolean[3][3]);
         // when
         clonedGeneration.evolvedCells = currentGeneration.evolvedCells.clone();
         // then
         Assert.assertEquals(currentGeneration.evolvedCells, clonedGeneration.evolvedCells);
     }
 
-    private static final Cell[][] ALIVE_0_F = new Cell[][]{
-            {d, d, d},
-            {d, a, d},
-            {d, d, d}
+    private static final Boolean[][] ALIVE_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, true, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] ALIVE_1_F = new Cell[][]{
-            {a, d, d},
-            {d, a, d},
-            {d, d, d}
+    private static final Boolean[][] ALIVE_1_F = new Boolean[][]{
+            {true, false, false},
+            {false, true, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] ALIVE_2_F = new Cell[][]{
-            {a, a, d},
-            {d, a, d},
-            {d, d, d}
+    private static final Boolean[][] ALIVE_2_F = new Boolean[][]{
+            {true, true, false},
+            {false, true, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] ALIVE_3_F = new Cell[][]{
-            {a, a, a},
-            {d, a, d},
-            {d, d, d}
+    private static final Boolean[][] ALIVE_3_F = new Boolean[][]{
+            {true, true, true},
+            {false, true, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] ALIVE_4_F = new Cell[][]{
-            {a, a, a},
-            {a, a, d},
-            {d, d, d}
+    private static final Boolean[][] ALIVE_4_F = new Boolean[][]{
+            {true, true, true},
+            {true, true, false},
+            {false, false, false}
     };
 
-    private static final Cell[][] ALIVE_5_F = new Cell[][]{
-            {a, a, a},
-            {a, a, d},
-            {d, d, a}
+    private static final Boolean[][] ALIVE_5_F = new Boolean[][]{
+            {true, true, true},
+            {true, true, false},
+            {false, false, true}
     };
 
-    private static final Cell[][] DEAD_0_F = new Cell[][]{
-            {d, d, d},
-            {d, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_0_F = new Boolean[][]{
+            {false, false, false},
+            {false, false, false},
+            {false, false, false}
     };
-    private static final Cell[][] DEAD_1_F = new Cell[][]{
-            {a, d, d},
-            {d, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_1_F = new Boolean[][]{
+            {true, false, false},
+            {false, false, false},
+            {false, false, false}
     };
-    private static final Cell[][] DEAD_2_F = new Cell[][]{
-            {a, a, d},
-            {d, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_2_F = new Boolean[][]{
+            {true, true, false},
+            {false, false, false},
+            {false, false, false}
     };
-    private static final Cell[][] DEAD_3_F = new Cell[][]{
-            {a, a, a},
-            {d, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_3_F = new Boolean[][]{
+            {true, true, true},
+            {false, false, false},
+            {false, false, false}
     };
-    private static final Cell[][] DEAD_4_F = new Cell[][]{
-            {a, a, a},
-            {a, d, d},
-            {d, d, d}
+    private static final Boolean[][] DEAD_4_F = new Boolean[][]{
+            {true, true, true},
+            {true, false, false},
+            {false, false, false}
     };
-    private static final Cell[][] DEAD_5_F = new Cell[][]{
-            {a, a, a},
-            {a, d, a},
-            {d, d, d}
+    private static final Boolean[][] DEAD_5_F = new Boolean[][]{
+            {true, true, true},
+            {true, false, true},
+            {false, false, false}
     };
 
     @DataProvider

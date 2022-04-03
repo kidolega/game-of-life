@@ -16,8 +16,6 @@ public class PrinterTest {
     static ByteArrayOutputStream outContent;
     static Printer printer;
     private Game game;
-    static final Cell a = new Cell(true);
-    static final Cell d = new Cell(false);
 
     @BeforeMethod
     private void setUp() {
@@ -25,12 +23,12 @@ public class PrinterTest {
         outContent = new ByteArrayOutputStream();
         printer = new Printer(new PrintStream(outContent));
         game = new Game(world, printer);
-        world.generation = new Generation(new Cell[3][3]);
+        world.generation = new Generation(new Boolean[3][3]);
     }
 
     public void shouldPrintAliveCell() {
         // given
-        world.generation.evolvedCells[1][1].state = true;
+        world.generation.evolvedCells[1][1] = true;
         // when
         printer.printCell(1, 1, world);
         //then
@@ -39,7 +37,7 @@ public class PrinterTest {
 
     public void shouldPrintDeadCell() {
         // given
-        world.generation.evolvedCells[1][1].state = false;
+        world.generation.evolvedCells[1][1] = false;
         // when
         printer.printCell(1, 1, world);
         //then
@@ -48,10 +46,10 @@ public class PrinterTest {
 
     public void testPrintWorld() {
         // given
-        world.generation.evolvedCells = new Cell[][] {
-                {d, d, d},
-                {d, a, d},
-                {d, d, d}
+        world.generation.evolvedCells = new Boolean[][] {
+                {false, false, false},
+                {false, true, false},
+                {false, false, false}
         };
         String expectedString = """
                 \u250F\u2501\u2513
