@@ -20,7 +20,6 @@ public class WorldTest {
     public void worldShouldChange() {
         // given
         world.generation = new Generation(AlIVE_0_F);
-//        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then
@@ -31,7 +30,6 @@ public class WorldTest {
     public void worldShouldNotChange() {
         // given
         world.generation = new Generation(DEAD_0_F);
-//        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then

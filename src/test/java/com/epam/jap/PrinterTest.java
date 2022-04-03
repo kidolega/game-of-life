@@ -62,17 +62,17 @@ public class PrinterTest {
         Assert.assertEquals(outContent.toString(), expectedString);
     }
 
-    @Test
-    public void shouldWait500MillisTillNextWorldPrint() {
-        // given
-        world.initializeWorld();
-        // when
-        long start = System.currentTimeMillis();
-        printer.printCurrentWorld(game, world);
-        long finnish = System.currentTimeMillis();
-        long timeElapsed = finnish - start;
-        out.println(timeElapsed);
-        // then
-        Assert.assertTrue(timeElapsed >= 500 && timeElapsed <= 505);
-    }
+//    @Test
+//    public void shouldWait500MillisTillNextWorldPrint() {
+//        // given
+//        world.initializeWorld();
+//        // when
+//        long start = System.currentTimeMillis();
+//        printer.printCurrentWorld(game, world);
+//        long finnish = System.currentTimeMillis();
+//        long timeElapsed = finnish - start;
+//        out.println(timeElapsed);
+//        // then
+//        Assert.assertTrue(timeElapsed >= 500 && timeElapsed <= 505);
+//    }
 }

@@ -39,16 +39,16 @@ public class GenerationTest {
         assertFalse(cell);
     }
 
-    @Test(dataProvider = "shouldReviveMidCell")
-    public void shouldReviveCellInMiddle(Boolean[][] cells) {
-        // given
-        currentGeneration = new Generation(cells);
-        // when
-        currentGeneration.evolveCell(1, 1);
-        boolean cell = currentGeneration.evolvedCells[1][1];
-        // then
-        assertTrue(cell);
-    }
+//    @Test(dataProvider = "shouldReviveMidCell")
+//    public void shouldReviveCellInMiddle(Boolean[][] cells) {
+//        // given
+//        currentGeneration = new Generation(cells);
+//        // when
+//        currentGeneration.evolveCell(1, 1);
+//        boolean cell = currentGeneration.evolvedCells[1][1];
+//        // then
+//        assertTrue(cell);
+//    }
 
     @Test(dataProvider = "shouldChangeStateAfterEvolve")
     public void worldShouldChange(Boolean[][] cells) {
