@@ -1,30 +1,36 @@
 package com.epam.jap;
 
+import java.util.Random;
+
 /**
  * Class that contains all methods necessary to create living game world.
  */
 public class World {
 
-    int height;
-    int width;
-    Population population;
+    public int height;
+    public int width;
+    Generation generation;
 
-    World(int[] dimensions) {
-        this.width = dimensions[0];
-        this.height = dimensions[1];
-        this.population = initializeDeadWorld(width, height);
+    World(int height, int width) {
+        this.height = height;
+        this.width = width;
     }
 
-    Population initializeDeadWorld(int width, int height) {
-        population.originalGeneration = new Cell[height][width];
+    void initializeWorld() {
+        Cell[][] cells = new Cell[height][width];
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                population.originalGeneration[row][col] = new Cell(false);
+                if (row == 0 || row == height - 1 || col == 0 || col == width - 1) {
+                    cells[row][col].kill();
+                } else {
+                    cells[row][col].initialize();
+                }
             }
         }
-        return population;
+        generation = new Generation(cells);
     }
+
     void evolveWorld() {
-        population.evolveGeneration();
+        generation.evolve();
     }
 }

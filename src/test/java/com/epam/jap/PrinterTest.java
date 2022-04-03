@@ -21,34 +21,34 @@ public class PrinterTest {
 
     @BeforeMethod
     private void setUp() {
-        world = new World(new int[]{3,3});
+        world = new World(3, 3);
         outContent = new ByteArrayOutputStream();
-        printer = new Printer(new PrintStream(outContent), world);
+        printer = new Printer(new PrintStream(outContent));
         game = new Game(world, printer);
-        world.population = new Population(new Cell[3][3]);
+        world.generation = new Generation(new Cell[3][3]);
     }
 
     public void shouldPrintAliveCell() {
         // given
-        world.population.evolvedGeneration[1][1].state = true;
+        world.generation.evolvedCells[1][1].state = true;
         // when
-        printer.printCell(1, 1);
+        printer.printCell(1, 1, world);
         //then
         Assert.assertEquals(outContent.toString(), "\u25CF");
     }
 
     public void shouldPrintDeadCell() {
         // given
-        world.population.evolvedGeneration[1][1].state = false;
+        world.generation.evolvedCells[1][1].state = false;
         // when
-        printer.printCell(1, 1);
+        printer.printCell(1, 1, world);
         //then
         Assert.assertEquals(outContent.toString(), " ");
     }
 
     public void testPrintWorld() {
         // given
-        world.population.evolvedGeneration = new Cell[][] {
+        world.generation.evolvedCells = new Cell[][] {
                 {d, d, d},
                 {d, a, d},
                 {d, d, d}
@@ -59,7 +59,7 @@ public class PrinterTest {
                 \u2517\u2501\u251B
                 """;
         // when
-        printer.printWorld();
+        printer.printWorld(world);
         // then
         Assert.assertEquals(outContent.toString(), expectedString);
     }
@@ -67,10 +67,10 @@ public class PrinterTest {
     @Test
     public void shouldWait500MillisTillNextWorldPrint() {
         // given
-        world.population.initializePopulation(3,3);
+        world.initializeWorld();
         // when
         long start = System.currentTimeMillis();
-        game.waitTillNextEvolution();
+        printer.printCurrentWorld(game, world);
         long finnish = System.currentTimeMillis();
         long timeElapsed = finnish - start;
         out.println(timeElapsed);

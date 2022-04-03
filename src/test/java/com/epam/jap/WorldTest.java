@@ -1,5 +1,6 @@
 package com.epam.jap;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -15,29 +16,29 @@ public class WorldTest {
 
     @BeforeMethod
     public void setUp() {
-        world = new World(new int[]{3,3});
+        world = new World(3, 3);
     }
 
     @Test
     public void worldShouldChange() {
         // given
-        world.population = new Population(AlIVE_0_F);
+        world.generation = new Generation(AlIVE_0_F);
 //        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then
-        assertNotSame(world.population.evolvedGeneration, world.population.originalGeneration);
+        assertNotSame(world.generation.evolvedCells, world.generation.originalCells);
     }
 
     @Test
     public void worldShouldNotChange() {
         // given
-        world.population = new Population(DEAD_0_F);
+        world.generation = new Generation(DEAD_0_F);
 //        world.pastGeneration = world.currentGeneration.clone();
         // when
         world.evolveWorld();
         // then
-        assertTrue(Arrays.deepEquals(world.population.evolvedGeneration, world.population.originalGeneration));
+        assertTrue(Arrays.deepEquals(world.generation.evolvedCells, world.generation.originalCells));
     }
 
 //    @Test

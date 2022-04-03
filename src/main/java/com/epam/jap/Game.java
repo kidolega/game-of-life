@@ -1,7 +1,11 @@
 package com.epam.jap;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Creates The Game.
@@ -9,8 +13,6 @@ import java.util.Scanner;
  * @Author Marcin Dolega
  */
 public record Game(World world, Printer printer) {
-
-        static User user = new User();
 
     /**
      * Starts The Game.
@@ -20,20 +22,21 @@ public record Game(World world, Printer printer) {
 
     public static void main(String[] args) {
 
-        World world = new World(user.setWorldDimensions(new Scanner(System.in)));
-        Printer printer = new Printer(System.out, world);
+        Printer printer = new Printer(System.out);
+        World world = new World(0, 0);
         Game game = new Game(world, printer);
+        game.setWorldDimensions(new Scanner(System.in));
         game.play();
 
     }
 
     void play() {
-        world.population.initializePopulation(world.width, world().height);
+        world.initializeWorld();
         do {
-            printer.printWorld();
+            printer.printCurrentWorld(this, world);
             world.evolveWorld();
             waitTillNextEvolution();
-        } while (Arrays.deepEquals(world.population.evolvedGeneration, world.population.originalGeneration));
+        } while (!Arrays.deepEquals(world.generation.evolvedCells, world.generation.originalCells));
     }
 
     void waitTillNextEvolution() {
@@ -42,5 +45,27 @@ public record Game(World world, Printer printer) {
         } catch (InterruptedException ignore) {
             ignore.printStackTrace();
         }
+    }
+
+    int getSideSizeFromUser(@NotNull String axis, @NotNull Scanner scanner) {
+        String string;
+        Pattern pattern = Pattern.compile("^[1-9][0-9]*$");
+        Matcher matcher;
+        do {
+            System.out.println("Enter world " + axis + ":");
+            string = scanner.nextLine();
+            matcher = pattern.matcher(string);
+        } while (!matcher.matches());
+        if (axis.equals("width")) {
+            return Integer.parseInt(string);
+        } else if (axis.equals("height")) {
+            return Integer.parseInt(string);
+        }
+        return 0;
+    }
+
+    void setWorldDimensions(Scanner scanner) {
+        world.width = getSideSizeFromUser("width", scanner);
+        world.height = getSideSizeFromUser("height", scanner);
     }
 }
