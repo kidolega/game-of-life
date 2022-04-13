@@ -25,6 +25,7 @@ public record Game(World world, Printer printer) {
         Printer printer = new Printer(System.out);
         World world = new World(0, 0);
         Game game = new Game(world, printer);
+        System.out.println("Hello!");
         game.setWorldDimensions(new Scanner(System.in));
         game.play();
 
